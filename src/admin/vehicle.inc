@@ -18,20 +18,27 @@ CMD:aveh(playerid, params[]) {
 
   if (GetCommandAction("create")) {
     new
-      vehicletype,
-      color1,
-      color2,
+      vehicletype = 522,
+      color1 = 0,
+      color2 = 0,
       Float:pos[3]
     ;
     
     GetPlayerPos(playerid, XYZ0(pos));
-    if (sscanf(args, "ddd", vehicletype, color1, color2)) {
-      CreateVehicle(400, XYZ0(pos), 0, 0, 0, 999999);
+    sscanf(args, "ddd", vehicletype, color1, color2);
+    CreateVehicle(vehicletype, XYZ0(pos), 0, color1, color2, -1);
+    PutPlayerInVehicle(playerid, gLastCreatedVehicle, 0);
+  }
 
-      return 1;
+  if (GetCommandAction("remove")) {
+    new vehicleid = GetPlayerVehicleID(playerid);
+
+    if (IsPlayerVehicleDriver(playerid, vehicleid)) {
+      DestroyVehicle(vehicleid);
+      SendClientMessage(playerid, COLOR_SUCCESS, "> Транспорт успешно удалён.");
+    } else {
+      SendClientMessage(playerid, COLOR_ERROR, "> Чтобы удалить транспорт, нужно сначала сесть в него.");
     }
-
-    CreateVehicle(vehicletype, XYZ0(pos), 0, color1, color2, 999999);
   }
 
   return 1;

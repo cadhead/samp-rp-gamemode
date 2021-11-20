@@ -4,7 +4,8 @@
 
 #define _veh_included
 
-#include "./vehicle/commands.inc"
+#include "./vehicle/utility"
+#include "./vehicle/commands"
 
 new static
   engine,
@@ -59,5 +60,12 @@ stock Vehicle_ToggleLights(vehicleid, newstate = VEHICLE_PARAMS_UNSET) {
   SetVehicleParamsEx(vehicleid, engine, newstate, alarm, doors, bonnet, boot, objective);
 
   return newstate;
+}
+
+stock IsPlayerVehicleDriver(playerid, vehicleid) {
+  if (vehicleid == INVALID_VEHICLE_ID) return 0;
+  if (GetPlayerVehicleSeat(playerid) != 0) return 0;
+
+  return 1;
 }
 

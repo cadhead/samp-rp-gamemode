@@ -4,13 +4,6 @@
 
 #define _veh_cmd_included
 
-static stock IsPlayerVehicleDriver(playerid, vehicleid) {
-  if (vehicleid == INVALID_VEHICLE_ID) return 0;
-  if (GetPlayerVehicleSeat(playerid) != 0) return 0;
-
-  return 1;
-}
-
 CMD:veh(playerid, const params[]) {
   new 
     action[14],
