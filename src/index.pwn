@@ -1,14 +1,20 @@
 #pragma tabsize 2
 
 #include <a_samp>
+#define FIXES_Single 1
+#define FIX_GetServerVarAsInt 0
+#define FIX_GetPlayerWeather 1 
+#define FIX_GetWeather 1 
+#define FIX_GetWorldTime 1
+#include <fixes>
+#include <YSI_Coding\y_hooks>
 #include <a_mysql>
 #include <sscanf2>
-#include <YSI_Coding\y_hooks>
 #include <streamer>
 #include <Pawn.CMD>
 #include <foreach>
 #include <formatex>
-#include <mdialog>
+// #include <mdialog>
 #define ZMSG_MAX_CHAT_LENGTH 84
 #define ZMSG_MAX_PLAYER_CHAT_LENGTH 84
 #define ZMSG_SEPARATORS_LIST ' '

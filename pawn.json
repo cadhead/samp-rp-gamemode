@@ -15,7 +15,8 @@
 		"karimcambridge/samp-foreach",
 		"urShadow/Pawn.CMD",
 		"oscar-broman/samp-weapon-config",
-		"pawn-lang/YSI-Includes"
+		"pawn-lang/YSI-Includes",
+		"pawn-lang/sa-mp-fixes"
 	],
 	"local": true,
 	"runtime": {
