@@ -5,7 +5,6 @@
 #define _helpers_included
 
 #include "./helpers/fscm"
-#include "./helpers/memset"
 #include "./helpers/roleplay"
 #include "./helpers/proxdetector"
 

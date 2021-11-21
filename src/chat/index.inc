@@ -25,15 +25,8 @@
 #include "./chat/actions"
 #include "./chat/talk"
 
-public Chat_OnPlayerText(playerid, text[]) {
+hook OnPlayerText(playerid, text[]) {
   callcmd::local(playerid, text);
-
-  return 1;
-}
-
-public Chat_OnGameModeUpdate() {
-
-  return 1;
 }
 
 stock ICChat(playerid, const text[], Float:range = CHAT_LOCAL_MAX_RANGE, const action[MAX_CHAT_IC_TALK_ACTION] = "произнес") {

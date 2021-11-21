@@ -17,7 +17,7 @@ new static
   objective
 ;
 
-public Vehicle_OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
   switch (newkeys) {
     case KEY_ACTION: {
       callcmd::veh(playerid, "engine");
@@ -26,8 +26,6 @@ public Vehicle_OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
       callcmd::veh(playerid, "lights");
     }
   }
-
-  return 1;
 }
 
 stock Vehicle_ToggleEngine(vehicleid, newstate = VEHICLE_PARAMS_UNSET) {

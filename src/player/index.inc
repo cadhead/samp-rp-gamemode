@@ -8,7 +8,7 @@
 #include "./player/character"
 #include "./player/death"
 
-public Player_OnPlayerConnect(playerid) {
+hook OnPlayerConnect(playerid) {
   TogglePlayerSpectating(playerid, true);
   SetPlayerColor(playerid, 0xFFFFFF00);
 
@@ -17,7 +17,7 @@ public Player_OnPlayerConnect(playerid) {
   return 1;
 }
 
-public Player_OnPlayerDisconnect(playerid) {
+hook OnPlayerDisconnect(playerid) {
   Character_ResetData(playerid);
 
   return 1;

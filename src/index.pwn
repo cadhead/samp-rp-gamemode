@@ -3,6 +3,7 @@
 #include <a_samp>
 #include <a_mysql>
 #include <sscanf2>
+#include <YSI_Coding\y_hooks>
 #include <streamer>
 #include <Pawn.CMD>
 #include <foreach>
@@ -15,7 +16,6 @@
 #define ZMSG_HYPHEN_START "... "
 #include <zmessage>
 #include <weapon-config>
-#include <YSI_Coding/y_hooks>
 
 #include "./colors"
 #include "./constants"
@@ -40,8 +40,6 @@ public OnGameModeInit() {
   SetVehiclePassengerDamage(true);
   SetDisableSyncBugs(true);
 
-  DB_OnGameModeInit();
-
   SetTimer("OnGameModeUpdate", 500, true);
 
   AddPlayerClass(0, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
@@ -50,33 +48,27 @@ public OnGameModeInit() {
 }
 
 public OnGameModeUpdate() {
-  Chat_OnGameModeUpdate();
 
   return 1;
 }
 
 public OnGameModeExit() {
-  DB_OnGameModeExit();
 
   return 1;
 }
 
 public OnPlayerConnect(playerid) {
-  Player_OnPlayerConnect(playerid);
 
   return 1;
 }
 
 public OnPlayerDisconnect(playerid, reason) {
-  Player_OnPlayerDisconnect(playerid);
 
   return 1;
 }
 
-static once[MAX_PLAYERS] = 0;
-
 public OnPlayerSpawn(playerid) {
-  if (!once[playerid]) SetTimerEx("OnPlayerSpawned", 1000, 0, "d", playerid);
+  SetTimerEx("OnPlayerSpawned", 1000, 0, "d", playerid);
 
   return 1;
 }
@@ -87,15 +79,10 @@ public OnPlayerRequestClass(playerid, classid) {
 }
 
 public OnPlayerSpawned(playerid) {
-  Character_OnPlayerSpawned(playerid);
-
-  once[playerid] = 1;
-
   return 1;
 }
 
 public OnPlayerText(playerid, text[]) {
-  Chat_OnPlayerText(playerid, text);
 
   return 0;
 }
@@ -120,7 +107,6 @@ public OnVehicleSpawn(vehicleid) {
 }
 
 public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
-  Vehicle_OnPlayerKeyStateChange(playerid, newkeys, oldkeys);
 
   return 1;
 }

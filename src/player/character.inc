@@ -26,7 +26,7 @@ enum e_Player_Character {
 new gCharacter[MAX_PLAYERS][e_Player_Character];
 new gCharacterFormatedName[MAX_PLAYERS][MAX_PLAYER_NAME];
 
-public Character_OnPlayerSpawned(playerid) {
+hook OnPlayerSpawned(playerid) {
   GivePlayerMoney(playerid, gCharacter[playerid][e_cCash]);
   SetPlayerVirtualWorld(playerid, gCharacter[playerid][e_cSpawnWorld]);
   SetPlayerInterior(playerid, gCharacter[playerid][e_cSpawnInt]);

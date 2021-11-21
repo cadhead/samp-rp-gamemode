@@ -11,16 +11,12 @@
 
 static MySQL:gConnectionHandle;
 
-public DB_OnGameModeInit() {
+hook OnGameModeInit() {
   DB_Connect(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWD, DATABASE_NAME);
-
-  return 1;
 }
 
-public DB_OnGameModeExit() {
+hook OnGameModeExit() {
   DB_ConnectionClose();
-
-  return 1;
 }
 
 public DB_Connect(const host[], const user[], const pass[], const db[]) {
