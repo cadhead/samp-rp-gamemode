@@ -79,7 +79,6 @@ public OnPlayerSpawn(playerid) {
   return 1;
 }
 
-
 public OnPlayerRequestClass(playerid, classid) {
   return 0;
 }
@@ -107,12 +106,12 @@ public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags) {
   return 1;
 }
 
-public OnVehicleSpawn(vehicleid) {
+public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
 
   return 1;
 }
 
-public OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+public OnVehicleSpawn(vehicleid) {
 
   return 1;
 }
