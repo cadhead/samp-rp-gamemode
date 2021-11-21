@@ -16,9 +16,7 @@ enum e_Player_Character {
 	e_cName[MAX_PLAYER_NAME + 1],
 	e_cCash,
 	e_cSkin,
-	Float:e_cSpawnX,
-	Float:e_cSpawnY,
-	Float:e_cSpawnZ,
+	Float:e_cSpawnPos[3],
 	e_cSpawnInt,
 	e_cSpawnWorld
 }
@@ -65,21 +63,17 @@ public Character_SetData(playerid) {
 	cache_get_value_int(0, "cash", gCharacter[playerid][e_cCash]);
 	cache_get_value_int(0, "skin", gCharacter[playerid][e_cSkin]);
 
-	cache_get_value_float(0, "spawnX", gCharacter[playerid][e_cSpawnX]);
-	cache_get_value_float(0, "spawnY", gCharacter[playerid][e_cSpawnY]);
-	cache_get_value_float(0, "spawnZ", gCharacter[playerid][e_cSpawnZ]);
+	cache_get_value_float(0, "spawnX", gCharacter[playerid][e_cSpawnPos][0]);
+	cache_get_value_float(0, "spawnY", gCharacter[playerid][e_cSpawnPos][1]);
+	cache_get_value_float(0, "spawnZ", gCharacter[playerid][e_cSpawnPos][2]);
 	cache_get_value_int(0, "spawnInt", gCharacter[playerid][e_cSpawnInt]);
 	cache_get_value_int(0, "spawnWorld", gCharacter[playerid][e_cSpawnWorld]);
-
 	
-
 	SetSpawnInfo(
 		playerid,
 		0,
 		gCharacter[playerid][e_cSkin],
-		gCharacter[playerid][e_cSpawnX],
-		gCharacter[playerid][e_cSpawnY],
-		gCharacter[playerid][e_cSpawnZ],
+		XYZ0(gCharacter[playerid][e_cSpawnPos]),
 		180.0, 0, 0, 0, 0, 0, 0
 	);
 
