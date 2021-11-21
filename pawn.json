@@ -13,22 +13,38 @@
 		"cadhead/zmessage",
 		"Southclaws/formatex",
 		"karimcambridge/samp-foreach",
-		"urShadow/Pawn.CMD"
+		"urShadow/Pawn.CMD",
+		"oscar-broman/samp-weapon-config",
+		"pawn-lang/YSI-Includes"
 	],
 	"local": true,
 	"runtime": {
-		"gamemodes": ["samp-rp-gamemode"],
-  	"plugins": ["sscanf", "pawncmd", "mysql", "streamer"],
-		"rcon": false,
-		"gamemodetext": "samp-rp-gamemode",
+		"version": "0.3.7",
+		"mode": "server",
+		"gamemodes": [
+			"samp-rp-gamemode"
+		],
+		"plugins": [
+			"sscanf",
+			"pawncmd",
+			"mysql",
+			"streamer"
+		],
+		"rcon_password": "password",
 		"port": 7777,
 		"hostname": "RolePlay Gamemode (0.3.7)",
 		"maxplayers": 150,
 		"language": "Russian",
 		"mapname": "Los Santos",
+		"weburl": "www.sa-mp.com",
+		"gamemodetext": "samp-rp-gamemode",
 		"announce": true,
 		"lanmode": false,
 		"query": true,
+		"rcon": false,
+		"logqueries": false,
+		"sleep": 5,
+		"maxnpc": 0,
 		"stream_rate": 1000,
 		"stream_distance": 200,
 		"onfoot_rate": 30,
@@ -46,6 +62,7 @@
 		"db_logging": false,
 		"db_log_queries": false,
 		"conncookies": true,
-		"cookielogging": false
+		"cookielogging": false,
+		"output": true
 	}
 }

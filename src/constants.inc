@@ -9,3 +9,6 @@ enum (<<= 1)
   CMD_ADMIN = 1,
   CMD_MODER
 };
+
+new Float:gPosition[3];
+new Float:gHealth;

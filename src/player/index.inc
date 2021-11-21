@@ -6,6 +6,7 @@
 
 #include "./player/kick"
 #include "./player/character"
+#include "./player/death"
 
 public Player_OnPlayerConnect(playerid) {
   TogglePlayerSpectating(playerid, true);

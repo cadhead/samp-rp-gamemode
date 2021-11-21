@@ -14,6 +14,8 @@
 #define ZMSG_HYPHEN_END   " ..."
 #define ZMSG_HYPHEN_START "... "
 #include <zmessage>
+#include <weapon-config>
+#include <YSI_Coding/y_hooks>
 
 #include "./colors"
 #include "./constants"
@@ -35,10 +37,14 @@ public OnGameModeInit() {
   ShowPlayerMarkers(false);
   ManualVehicleEngineAndLights();
   EnableVehicleFriendlyFire();
+  SetVehiclePassengerDamage(true);
+  SetDisableSyncBugs(true);
 
   DB_OnGameModeInit();
 
   SetTimer("OnGameModeUpdate", 500, true);
+
+  AddPlayerClass(0, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
 
   return 1;
 }
@@ -73,6 +79,11 @@ public OnPlayerSpawn(playerid) {
   if (!once[playerid]) SetTimerEx("OnPlayerSpawned", 1000, 0, "d", playerid);
 
   return 1;
+}
+
+
+public OnPlayerRequestClass(playerid, classid) {
+  return 0;
 }
 
 public OnPlayerSpawned(playerid) {
