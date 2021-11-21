@@ -1,11 +1,24 @@
 #pragma tabsize 2
+#pragma warning disable 203
 
 #include <a_samp>
 #define FIXES_Single 1
-#define FIX_GetServerVarAsInt 0
+#define FIXES_DefaultDisabled 1
 #define FIX_GetPlayerWeather 1 
 #define FIX_GetWeather 1 
 #define FIX_GetWorldTime 1
+#define FIX_API 1
+#define FIX_strfind 1
+#define FIX_strcmp 1
+#define FIX_SetPlayerColor 1
+#define FIX_OnPlayerSpawn	1
+#define FIX_ClearAnimations 1
+#define FIX_random 1
+#define FIX_Kick 1
+#define FIX_TrainExit 1
+#define FIX_strins 1
+#define FIX_SetPlayerSkin	1
+#define FIX_SetSpawnInfo 1
 #include <fixes>
 #include <YSI_Coding\y_hooks>
 #include <a_mysql>
@@ -79,11 +92,27 @@ public OnPlayerSpawn(playerid) {
   return 1;
 }
 
+public OnPlayerSpawned(playerid) {
+  return 1;
+}
+
 public OnPlayerRequestClass(playerid, classid) {
   return 0;
 }
 
-public OnPlayerSpawned(playerid) {
+public OnPlayerDeath(playerid, killerid, reason) {
+  return 1;
+}
+
+public OnPlayerDeathFinished(playerid, bool:cancelable) {
+  return 1;
+}
+
+public OnPlayerDamage(&playerid, &Float:amount, &issuerid, &weapon, &bodypart) {
+  return 1;
+}
+
+public OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
   return 1;
 }
 
