@@ -1,3 +1,9 @@
+#if defined _hlp_anim_included
+  #endinput
+#endif
+
+#define _hlp_anim_included
+
 new walk_anim[][] = {
   {  "WALK_civi" },
   {  "WALK_gang1" },

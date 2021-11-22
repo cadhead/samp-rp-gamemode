@@ -45,4 +45,4 @@ CMD:veh(playerid, const params[]) {
 
   return 1;
 }
-alias:veh("vehicle", "car")
+alias:veh("vehicle")
