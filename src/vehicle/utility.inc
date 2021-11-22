@@ -1,3 +1,9 @@
+#if defined _veh_utility_included
+  #endinput
+#endif
+
+#define _veh_utility_included
+
 #include <YSI_Coding\y_hooks>
 
 new
