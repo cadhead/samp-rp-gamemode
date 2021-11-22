@@ -18,7 +18,8 @@ enum e_Player_Character {
 	e_cSkin,
 	Float:e_cSpawnPos[3],
 	e_cSpawnInt,
-	e_cSpawnWorld
+	e_cSpawnWorld,
+	e_cDeathStage
 }
 
 new gCharacter[MAX_PLAYERS][e_Player_Character];

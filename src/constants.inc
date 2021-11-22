@@ -12,3 +12,9 @@ enum (<<= 1)
 
 new Float:gPosition[3];
 new Float:gHealth;
+new gRandomValue;
+
+#define X     0
+#define Y     1
+#define Z     2
+#define ANGLE 3

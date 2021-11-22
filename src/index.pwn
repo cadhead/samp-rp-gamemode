@@ -19,6 +19,7 @@
 #define FIX_strins 1
 #define FIX_SetPlayerSkin	1
 #define FIX_SetSpawnInfo 1
+#define FIX_const 1
 #include <fixes>
 #include <YSI_Coding\y_hooks>
 #include <a_mysql>
@@ -27,7 +28,7 @@
 #include <Pawn.CMD>
 #include <foreach>
 #include <formatex>
-// #include <mdialog>
+#include <mdialog>
 #define ZMSG_MAX_CHAT_LENGTH 84
 #define ZMSG_MAX_PLAYER_CHAT_LENGTH 84
 #define ZMSG_SEPARATORS_LIST ' '
