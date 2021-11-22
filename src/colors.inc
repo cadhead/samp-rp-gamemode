@@ -38,3 +38,15 @@
 
 #define COLOR_SUCCESS      COLOR_GREEN
 #define COLOR_ERROR        COLOR_RED
+
+#define cWHITE      "{EAEAEA}"
+#define cBLACK      "{000000}"
+#define cGREY       "{BFC0C2}"
+#define cYELLOW     "{FFF666}"
+#define cGREEN      "{33FF33}"
+#define cLIGHTGREEN "{A1CC82}"
+#define cBLUE       "{0095ff}"
+#define cSKYBLUE    "{87CEEB}"
+#define cPURPLE     "{C2A2DA}"
+#define cRED        "{FF6347}"
+

@@ -4,9 +4,12 @@
 
 #define _pl_index_included
 
+#include <YSI_Coding\y_hooks>
+
 #include "./player/kick"
 #include "./player/character"
 #include "./player/death"
+#include "./player/anim"
 
 hook OnPlayerConnect(playerid) {
   TogglePlayerSpectating(playerid, true);

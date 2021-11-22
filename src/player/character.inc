@@ -4,6 +4,8 @@
 
 #define _pl_character_included
 
+#include <YSI_Coding\y_hooks>
+
 #define DEFAULT_CHARACTER_POS_X     1715.7280
 #define DEFAULT_CHARACTER_POS_Y     -1936.9874
 #define DEFAULT_CHARACTER_POS_Z     13.5833

@@ -4,6 +4,7 @@
 
 #define _veh_included
 
+#include <YSI_Coding\y_hooks>
 #include "./vehicle/utility"
 #include "./vehicle/commands"
 

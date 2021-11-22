@@ -4,6 +4,8 @@
 
 #define _pl_death_included
 
+#include <YSI_Coding\y_hooks>
+
 enum {
   CHARACTER_HEALTHY = 0,
   CHARACTER_INJURED,

@@ -4,6 +4,8 @@
 
 #define _db_included
 
+#include <YSI_Coding\y_hooks>
+
 #define DATABASE_HOST     "remotemysql.com"
 #define DATABASE_USER     "N2D6jM6jIm"
 #define DATABASE_NAME     "N2D6jM6jIm"

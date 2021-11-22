@@ -21,6 +21,8 @@
 #define CHATBUBBLE_EXPIRED_TIME  5000
 #define CHATBUBBLE_DRAW_DISTANCE CHAT_ACTION_MAX_RANGE
 
+#include <YSI_Coding\y_hooks>
+
 #include "./chat/service"
 #include "./chat/actions"
 #include "./chat/talk"
