@@ -57,7 +57,7 @@ hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
   if (playerid == INVALID_PLAYER_ID) return 1;
 
   new character_death_state = GetCharacterDeathStage(playerid);
-  new character_state_dead = GetCharacterDeathStage(playerid) == CHARACTER_DIED;
+  new character_state_dead = character_death_state == CHARACTER_DIED;
 
   if (character_death_state == CHARACTER_INJURED) {
     character_death_state = CHARACTER_DIED;
