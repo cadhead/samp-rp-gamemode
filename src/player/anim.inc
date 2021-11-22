@@ -25,8 +25,8 @@ stock PlayAnimation(playerid, const animlib[], const animname[], Float:fDelta, l
     SetPlayerAnimationPlayed(playerid, 1);
   }
 
-  ApplyAnimation(playerid, animlib, "null", 0.0,0,0,0,0,0);
-  ApplyAnimation(playerid, animlib, animname, fDelta, loop, lockx, locky, freeze, time);
+  ApplyAnimation(playerid, animlib, "null", 0.0,0,0,0,0,0, 1);
+  ApplyAnimation(playerid, animlib, animname, fDelta, loop, lockx, locky, freeze, time, 1);
 
   return 1;
 }
