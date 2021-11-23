@@ -7,7 +7,6 @@
 #include "./helpers/fscm"
 #include "./helpers/roleplay"
 #include "./helpers/proxdetector"
-#include "./helpers/animations"
 
 enum {
 	DURATION_SECOND = 1,

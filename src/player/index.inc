@@ -10,6 +10,7 @@
 #include "./player/character"
 #include "./player/death"
 #include "./player/anim"
+#include "./player/walkstyle"
 
 hook OnPlayerConnect(playerid) {
   TogglePlayerSpectating(playerid, true);
