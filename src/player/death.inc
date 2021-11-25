@@ -15,7 +15,9 @@ enum {
 new static
   Text3D:death_text[MAX_PLAYERS],
   respawn_time[MAX_PLAYERS],
-  Float:death_pos[MAX_PLAYERS][3]
+  Float:death_pos[MAX_PLAYERS][3],
+  damage_taken_times[MAX_PLAYERS],
+  damage_taken_total[MAX_PLAYERS][100]
 ;
 
 new static
@@ -77,6 +79,7 @@ hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
 
   if (!character_state_dead) {
     SetCharacterDeathStage(playerid, character_death_state);
+    SetCharacterDamageTaken(playerid, issuerid, bodypart, weapon, amount);
   }
 
   return 1;
@@ -199,6 +202,25 @@ static stock CreateDeathMessage3dText(playerid, stage) {
       message, COLOR_RED, XYZ0(death_pos[playerid]), 15.0, playerid
     );
   }
+
+  return 1;
+}
+
+static stock SetCharacterDamageTaken(playerid, issuerid, bodypart, weaponid, Float:amount) {
+  new
+    id,
+    Float:armour
+  ;
+
+  damage_taken_times[playerid]++;
+  for(new i = 0; i < 100; i++) {
+    if (damage_taken_total[playerid][i]) {
+      id = i;
+      break;
+    }
+  }
+
+  damage_taken_total[playerid][id] = floatround(amount, floatround_round);
 
   return 1;
 }
