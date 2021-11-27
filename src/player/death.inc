@@ -151,10 +151,10 @@ stock SetCharacterDeathStage(playerid, stage) {
 static stock ApplyDeathAnimation(playerid, stage) {
   switch(stage) {
     case CHARACTER_INJURED: {
-      ApplyAnimation(playerid, "WUZI", "CS_Dead_Guy", 4.1, 0, 1, 1, 1, 0);
+      ApplyAnimation(playerid, "WUZI", "CS_Dead_Guy", 4.1, 0, 1, 1, 1, 1);
     }
     case CHARACTER_DIED: {
-      ApplyAnimation(playerid, "PED", "FLOOR_hit_f", 4.1, 0, 1, 1, 1, 0);
+      ApplyAnimation(playerid, "PED", "FLOOR_hit_f", 4.1, 0, 1, 1, 1, 1);
     }
   }
 }
@@ -214,7 +214,7 @@ static stock SetCharacterDamageTaken(playerid, issuerid, bodypart, weaponid, Flo
 
   damage_taken_times[playerid]++;
   for(new i = 0; i < 100; i++) {
-    if (damage_taken_total[playerid][i]) {
+    if (damage_taken_total[playerid][i])  {
       id = i;
       break;
     }
