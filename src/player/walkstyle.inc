@@ -68,22 +68,22 @@ public PlayWalkAnimation(playerid) {
 
 static stock ProcessWalkAnimation(playerid, id) {
   switch (id) {
-    case 1: PlayAnimation(playerid, "PED", "WALK_civi", 4.1, 1, 1, 1, 1, 1, 1);
-    case 2: PlayAnimation(playerid, "PED", "WALK_armed", 4.1, 1, 1, 1, 1, 1, 1);
-    case 3: PlayAnimation(playerid, "PED", "WALK_fat", 4.1, 1, 1, 1, 1, 1, 1);
-    case 4: PlayAnimation(playerid, "PED", "WALK_fatold", 4.1, 1, 1, 1, 1, 1, 1);
-    case 5: PlayAnimation(playerid, "FAT", "FatWalk", 4.1, 1, 1, 1, 1, 1, 1);
-    case 6: PlayAnimation(playerid, "MUSCULAR", "MuscleWalk", 4.1, 1, 1, 1, 1, 1, 1);
-    case 7: PlayAnimation(playerid, "PED", "WALK_gang1", 4.1, 1, 1, 1, 1, 1, 1);
-    case 8: PlayAnimation(playerid, "PED", "WALK_gang2", 4.1, 1, 1, 1, 1, 1, 1);
-    case 9: PlayAnimation(playerid, "PED", "WALK_player", 4.1, 1, 1, 1, 1, 1, 1);
-    case 10: PlayAnimation(playerid, "PED", "WALK_old", 4.1, 1, 1, 1, 1, 1, 1);
-    case 11: PlayAnimation(playerid, "PED", "WALK_wuzi", 4.1, 1, 1, 1, 1, 1, 1);
-    case 12: PlayAnimation(playerid, "PED", "WOMAN_walkbusy", 4.1, 1, 1, 1, 1, 1, 1);
-    case 13: PlayAnimation(playerid, "PED", "WOMAN_walkfatold", 4.1, 1, 1, 1, 1, 1, 1);
-    case 14: PlayAnimation(playerid, "PED", "WOMAN_walknorm", 4.1, 1, 1, 1, 1, 1, 1);
-    case 15: PlayAnimation(playerid, "PED", "WOMAN_walksexy", 4.1, 1, 1, 1, 1, 1, 1);
-    case 16: PlayAnimation(playerid, "PED", "WOMAN_walkshop", 4.1, 1, 1, 1, 1, 1, 1);
+    case 1: PlayAnimation(playerid, "PED", "WALK_civi", 4.1, 1, 1, 1, 1, 1);
+    case 2: PlayAnimation(playerid, "PED", "WALK_armed", 4.1, 1, 1, 1, 1, 1);
+    case 3: PlayAnimation(playerid, "PED", "WALK_fat", 4.1, 1, 1, 1, 1, 1);
+    case 4: PlayAnimation(playerid, "PED", "WALK_fatold", 4.1, 1, 1, 1, 1, 1);
+    case 5: PlayAnimation(playerid, "FAT", "FatWalk", 4.1, 1, 1, 1, 1, 1);
+    case 6: PlayAnimation(playerid, "MUSCULAR", "MuscleWalk", 4.1, 1, 1, 1, 1, 1);
+    case 7: PlayAnimation(playerid, "PED", "WALK_gang1", 4.1, 1, 1, 1, 1, 1);
+    case 8: PlayAnimation(playerid, "PED", "WALK_gang2", 4.1, 1, 1, 1, 1, 1);
+    case 9: PlayAnimation(playerid, "PED", "WALK_player", 4.1, 1, 1, 1, 1, 1);
+    case 10: PlayAnimation(playerid, "PED", "WALK_old", 4.1, 1, 1, 1, 1, 1);
+    case 11: PlayAnimation(playerid, "PED", "WALK_wuzi", 4.1, 1, 1, 1, 1, 1);
+    case 12: PlayAnimation(playerid, "PED", "WOMAN_walkbusy", 4.1, 1, 1, 1, 1, 1);
+    case 13: PlayAnimation(playerid, "PED", "WOMAN_walkfatold", 4.1, 1, 1, 1, 1, 1);
+    case 14: PlayAnimation(playerid, "PED", "WOMAN_walknorm", 4.1, 1, 1, 1, 1, 1);
+    case 15: PlayAnimation(playerid, "PED", "WOMAN_walksexy", 4.1, 1, 1, 1, 1, 1);
+    case 16: PlayAnimation(playerid, "PED", "WOMAN_walkshop", 4.1, 1, 1, 1, 1, 1);
   }
 
   return 1;
