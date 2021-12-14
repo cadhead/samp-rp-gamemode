@@ -201,6 +201,8 @@ static stock CreateDeathMessage3dText(playerid, stage) {
 }
 
 static stock SetCharacterDamageTaken(playerid, issuerid, bodypart, weaponid, Float:amount) {
+  if (!IsPlayerConnected(issuerid)) return 1;
+
   damage_taken_total[playerid]++;
 
   new body_part[15];
