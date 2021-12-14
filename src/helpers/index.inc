@@ -56,3 +56,26 @@ enum {
 #define months%1:DURATION   * DURATION_MONTH
 #define year%1:DURATION     * DURATION_YEAR
 #define years%1:DURATION    * DURATION_YEAR
+
+stock Float:GetDistanceBetweenPlayers(p1, p2) {
+	new
+		Float:x1,
+		Float:y1,
+		Float:z1,
+		Float:x2,
+		Float:y2,
+		Float:z2,
+		Float:rx,
+		Float:ry,
+		Float:rz
+	;
+
+	GetPlayerPos(p1, x1, y1, z1);
+	GetPlayerPos(p2, x2, y2, z2);
+
+	rx = floatpower(floatabs(floatsub(x2, x1)), 2);
+	ry = floatpower(floatabs(floatsub(y2, y1)), 2);
+	rz = floatpower(floatabs(floatsub(z2, z1)), 2);
+
+	return floatsqroot(rx + ry + rz);
+}
