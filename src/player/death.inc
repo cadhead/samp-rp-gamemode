@@ -12,12 +12,20 @@ enum {
   CHARACTER_DIED
 }
 
+enum e_Player_Death {
+  e_dAmount,
+  e_dWeapon,
+  e_dWhen,
+  e_dBodyPart,
+  e_dBy
+}
+
 new static
   Text3D:death_text[MAX_PLAYERS],
   respawn_time[MAX_PLAYERS],
   Float:death_pos[MAX_PLAYERS][3],
-  damage_taken_times[MAX_PLAYERS],
-  damage_taken_total[MAX_PLAYERS][100]
+  damage_taken[MAX_PLAYERS][100][e_Player_Death],
+  damage_taken_total[MAX_PLAYERS]
 ;
 
 new static
@@ -30,6 +38,14 @@ static const max_respawn_time = 10;
 
 #define GetCharacterDeathStage(%0) gCharacter[%0][e_cDeathStage]
 #define STAGE_HEALTH_AMOUNT 10.0
+
+#define BODY_PART_CHEST	     3
+#define BODY_PART_GROIN      4
+#define BODY_PART_LEFT_ARM   5
+#define BODY_PART_RIGHT_ARM  6
+#define BODY_PART_LEFT_LEG   7
+#define BODY_PART_RIGHT_LEG  8
+#define BODY_PART_HEAD       9
 
 CMD:test(playerid, params[]) {
   sscanf(params, "f", gHealth);
@@ -87,12 +103,176 @@ hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
 
 hook OnPlayerUpdate(playerid) {
   if (GetCharacterDeathStage(playerid)) {
+    if (GetPlayerAnimationIndex(playerid) == 1189) return 1;
     if (GetPlayerAnimationIndex(playerid) == 1151) return 1;
     if (GetPlayerAnimationIndex(playerid) == 1701) return 1;
     ApplyDeathAnimation(playerid, GetCharacterDeathStage(playerid));
   }
 
   return 1;
+}
+
+stock SetCharacterDeathStage(playerid, stage) {
+  switch(stage) {
+    case CHARACTER_INJURED: {
+      gCharacter[playerid][e_cDeathStage] = CHARACTER_INJURED;
+      TogglePlayerControllable(playerid, false);
+    }
+    case CHARACTER_DIED: {
+      gCharacter[playerid][e_cDeathStage] = CHARACTER_DIED;
+      respawn_time[playerid] = gettime() + max_respawn_time;
+    }
+    case CHARACTER_HEALTHY: {
+      gCharacter[playerid][e_cDeathStage] = CHARACTER_HEALTHY;
+      TogglePlayerControllable(playerid, true);
+    }
+  }
+
+  ClearCharacterDamageTaken(playerid);
+  ApplyDeathAnimation(playerid, stage);
+  SendDeathStageMessage(playerid, stage);
+  CreateDeathMessage3dText(playerid, stage);
+}
+
+static stock ApplyDeathAnimation(playerid, stage) {
+  switch(stage) {
+    case CHARACTER_INJURED: {
+      ApplyAnimation(playerid, "WUZI", "CS_Dead_Guy", 4.1, 0, 1, 1, 1, 1, 1);
+    }
+    case CHARACTER_DIED: {
+      ApplyAnimation(playerid, "PED", "FLOOR_hit_f", 4.1, 0, 1, 1, 1, 1, 1);
+    }
+  }
+}
+
+static stock SendDeathStageMessage(playerid, stage) {
+  switch(stage) {
+    case CHARACTER_INJURED: {
+      SendClientMessage(playerid, COLOR_ERROR, "> Ваш персонаж сильно ранен! Если его не спасут — он умрёт.", false);
+      SendClientMessage(playerid, COLOR_ERROR, "> Чтобы принять смерть введите /acceptdeath.");
+    }
+    case CHARACTER_DIED: {
+      SendClientMessage(playerid, COLOR_ERROR, "> Ваш персонаж мёртв! Вы сможете зареспавниться через %d секунд.", false, max_respawn_time);
+      SendClientMessage(playerid, COLOR_ERROR, "> Чтобы зареспавниться, введите /respawnme.", false);
+    }
+  }
+}
+
+static stock CreateDeathMessage3dText(playerid, stage) {
+  new message[144];
+
+  switch(stage) {
+    case CHARACTER_INJURED: {
+      format(message, sizeof message,
+        "(( Ранен %i раз, /dm %i для более детальной информации. ))",
+        damage_taken_total[playerid], playerid
+      );
+    }
+    case CHARACTER_DIED: {
+      strcat(message, "(( ПЕРСОНАЖ МЁРТВ ))");
+    }
+    default: {
+      DestroyDynamic3DTextLabel(death_text[playerid]);
+      death_text[playerid] = Text3D:INVALID_3DTEXT_ID;
+    }
+  }
+
+  if (!strlen(message)) return 0;
+
+  if (IsValidDynamic3DTextLabel(death_text[playerid])) {
+    UpdateDynamic3DTextLabelText(death_text[playerid], COLOR_RED, message);
+  } else {
+    death_text[playerid] = CreateDynamic3DTextLabel(
+      message, COLOR_RED, XYZ0(death_pos[playerid]), 15.0, playerid
+    );
+  }
+
+  return 1;
+}
+
+static stock SetCharacterDamageTaken(playerid, issuerid, bodypart, weaponid, Float:amount) {
+  damage_taken_total[playerid]++;
+
+  new body_part[15];
+
+  for (new id; id < 20; id++) {
+    if (!damage_taken[playerid][id][e_dAmount]) {
+      damage_taken[playerid][id][e_dAmount] = floatround(amount);
+      damage_taken[playerid][id][e_dWeapon] = weaponid;
+      damage_taken[playerid][id][e_dWhen] = gettime();
+      damage_taken[playerid][id][e_dBodyPart] = bodypart;
+      damage_taken[playerid][id][e_dBy] = issuerid;
+
+      GetBodyPartName(bodypart, body_part);
+      format(gString, sizeof gString,
+        "Вас ранил %s посредством %W, в %s",
+        gCharacterFormatedName[issuerid], weaponid, body_part
+      );
+      SendClientMessage(playerid, COLOR_RED, gString, false);
+      format(gString, sizeof gString,
+        "Вы ранили %s посредством %W, в %s",
+        gCharacterFormatedName[playerid], weaponid, body_part
+      );
+      SendClientMessage(issuerid, COLOR_RED, gString, false);
+
+      break;
+    }
+  }
+
+  return 1;
+}
+
+static stock ClearCharacterDamageTaken(playerid) {
+  new id;
+
+  for (id = 0; id < 20; id++) {
+    damage_taken[playerid][id][e_dAmount] = 0;
+    damage_taken[playerid][id][e_dWeapon] = 0;
+    damage_taken[playerid][id][e_dWhen] = 0;
+    damage_taken[playerid][id][e_dBodyPart] = 0;
+    damage_taken[playerid][id][e_dBy] = 0;
+  }
+}
+
+static stock GetBodyPartName(bodypart, bodyname[], len=sizeof bodyname) {
+  bodyname[0] = EOS;
+  switch(bodypart) {
+    case BODY_PART_CHEST: strcat(bodyname, "грудь", len); 
+    case BODY_PART_GROIN: strcat(bodyname, "пах", len);
+    case BODY_PART_LEFT_ARM: strcat(bodyname, "левую руку", len);
+    case BODY_PART_RIGHT_ARM: strcat(bodyname, "правую руку", len);
+    case BODY_PART_LEFT_LEG: strcat(bodyname, "левую ногу", len);
+    case BODY_PART_RIGHT_LEG: strcat(bodyname, "правую ногу", len);
+    case BODY_PART_HEAD: strcat(bodyname, "голову", len);
+	}
+}
+
+static stock ShowCharacterDamagesInfo(playerid, damagedid) {
+  gStringLarge[0] = EOS;
+
+  new
+    body_part[16],
+    issuerid
+  ;
+
+  for (new id; id < 20; id++) {
+    if (!damage_taken[damagedid][id][e_dAmount]) continue;
+
+    issuerid = damage_taken[damagedid][id][e_dBy];
+    GetBodyPartName(damage_taken[damagedid][id][e_dBodyPart], body_part);
+
+    format(gString, sizeof gString,
+      "%s нанёс %d урона в %s посредством %W, %d сек. назад\n",
+      gCharacterFormatedName[issuerid],
+      damage_taken[damagedid][id][e_dAmount],
+      body_part,
+      damage_taken[damagedid][id][e_dWeapon],
+      gettime() - damage_taken[damagedid][id][e_dWhen]
+    );
+    strcat(gStringLarge, gString);
+  }
+
+  return ShowPlayerDialog(playerid, 0, DIALOG_STYLE_MSGBOX, gCharacterFormatedName[damagedid], gStringLarge, DIALOG_CLOSE, "");
 }
 
 CMD:acceptdeath(playerid) {
@@ -128,99 +308,19 @@ CMD:respawnme(playerid) {
   return 1;
 }
 
-stock SetCharacterDeathStage(playerid, stage) {
-  switch(stage) {
-    case CHARACTER_INJURED: {
-      gCharacter[playerid][e_cDeathStage] = CHARACTER_INJURED;
-      TogglePlayerControllable(playerid, false);
-    }
-    case CHARACTER_DIED: {
-      gCharacter[playerid][e_cDeathStage] = CHARACTER_DIED;
-      respawn_time[playerid] = gettime() + max_respawn_time;
-    }
-    case CHARACTER_HEALTHY: {
-      gCharacter[playerid][e_cDeathStage] = CHARACTER_HEALTHY;
-      TogglePlayerControllable(playerid, true);
-    }
-  }
+CMD:damages(playerid, params[]) {
+  extract params -> new player:damagedid; else damagedid = playerid;
+  if (damagedid == INVALID_PLAYER_ID || !GetCharacterDeathStage(damagedid)) return 1;
 
-  ApplyDeathAnimation(playerid, stage);
-  SendDeathStageMessage(playerid, stage);
-}
-
-static stock ApplyDeathAnimation(playerid, stage) {
-  switch(stage) {
-    case CHARACTER_INJURED: {
-      ApplyAnimation(playerid, "WUZI", "CS_Dead_Guy", 4.1, 0, 1, 1, 1, 1);
-    }
-    case CHARACTER_DIED: {
-      ApplyAnimation(playerid, "PED", "FLOOR_hit_f", 4.1, 0, 1, 1, 1, 1);
-    }
-  }
-}
-
-static stock SendDeathStageMessage(playerid, stage) {
-  switch(stage) {
-    case CHARACTER_INJURED: {
-      SendClientMessage(playerid, COLOR_ERROR, "> Ваш персонаж сильно ранен! Если его не спасут — он умрёт.", false);
-      SendClientMessage(playerid, COLOR_ERROR, "> Чтобы принять смерть введите /acceptdeath.");
-    }
-    case CHARACTER_DIED: {
-      SendClientMessage(playerid, COLOR_ERROR, "> Ваш персонаж мёртв! Вы сможете принять PK через %d секунд.", true, max_respawn_time);
-      SendClientMessage(playerid, COLOR_ERROR, "> Чтобы зареспавниться, введите /respawnme.", false);
-    }
-  }
-
-  CreateDeathMessage3dText(playerid, stage);
-}
-
-static stock CreateDeathMessage3dText(playerid, stage) {
-  new message[144];
-
-  switch(stage) {
-    case CHARACTER_INJURED: {
-      format(message, sizeof message,
-        "(( Ранен %i раз, /damages %i для более детальной информации. ))",
-        10, playerid
-      );
-    }
-    case CHARACTER_DIED: {
-      strcat(message, "(( ПЕРСОНАЖ МЁРТВ ))");
-    }
-    default: {
-      DestroyDynamic3DTextLabel(death_text[playerid]);
-      death_text[playerid] = Text3D:INVALID_3DTEXT_ID;
-    }
-  }
-
-  if (!strlen(message)) return 0;
-
-  if (IsValidDynamic3DTextLabel(death_text[playerid])) {
-    UpdateDynamic3DTextLabelText(death_text[playerid], COLOR_RED, message);
-  } else {
-    death_text[playerid] = CreateDynamic3DTextLabel(
-      message, COLOR_RED, XYZ0(death_pos[playerid]), 15.0, playerid
+  if (
+    (GetDistanceBetweenPlayers(playerid, damagedid) > 10.0 || !IsPlayerStreamedIn(playerid, damagedid))
+    && (damagedid != playerid)
+  ) {
+    return SendClientMessage(playerid, COLOR_ERROR, 
+      "> Нужно находиться рядом с игроком.", false
     );
   }
 
-  return 1;
+  return ShowCharacterDamagesInfo(playerid, damagedid);
 }
-
-static stock SetCharacterDamageTaken(playerid, issuerid, bodypart, weaponid, Float:amount) {
-  new
-    id,
-    Float:armour
-  ;
-
-  damage_taken_times[playerid]++;
-  for(new i = 0; i < 100; i++) {
-    if (damage_taken_total[playerid][i])  {
-      id = i;
-      break;
-    }
-  }
-
-  damage_taken_total[playerid][id] = floatround(amount, floatround_round);
-
-  return 1;
-}
+alias:damages("dm")
