@@ -25,7 +25,8 @@ new static
   respawn_time[MAX_PLAYERS],
   Float:death_pos[MAX_PLAYERS][3],
   damage_taken[MAX_PLAYERS][100][e_Player_Death],
-  damage_taken_total[MAX_PLAYERS]
+  damage_taken_total[MAX_PLAYERS],
+  death_cooldown[MAX_PLAYERS]
 ;
 
 new static
@@ -35,6 +36,7 @@ new static
   };
 
 static const max_respawn_time = 10;
+static const max_death_cd = 3;
 
 #define GetCharacterDeathStage(%0) gCharacter[%0][e_cDeathStage]
 #define STAGE_HEALTH_AMOUNT 10.0
@@ -117,8 +119,16 @@ stock SetCharacterDeathStage(playerid, stage) {
     case CHARACTER_INJURED: {
       gCharacter[playerid][e_cDeathStage] = CHARACTER_INJURED;
       TogglePlayerControllable(playerid, false);
+      if (!death_cooldown[playerid]) {
+        death_cooldown[playerid] = gettime() + max_death_cd;
+      }
     }
     case CHARACTER_DIED: {
+      if (death_cooldown[playerid] > gettime()) {
+        return;
+      }
+
+      death_cooldown[playerid] = 0;
       gCharacter[playerid][e_cDeathStage] = CHARACTER_DIED;
       respawn_time[playerid] = gettime() + max_respawn_time;
     }
