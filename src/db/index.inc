@@ -6,10 +6,10 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define DATABASE_HOST     "remotemysql.com"
-#define DATABASE_USER     "N2D6jM6jIm"
-#define DATABASE_NAME     "N2D6jM6jIm"
-#define DATABASE_PASSWD   "qrc7cyARhE"
+#define DATABASE_HOST     "localhost"
+#define DATABASE_USER     "root"
+#define DATABASE_NAME     "srpgm"
+#define DATABASE_PASSWD   ""
 
 static MySQL:gConnectionHandle;
 

@@ -9,6 +9,7 @@
 #define DEFAULT_CHARACTER_POS_X     1715.7280
 #define DEFAULT_CHARACTER_POS_Y     -1936.9874
 #define DEFAULT_CHARACTER_POS_Z     13.5833
+#define DEFAULT_CHARACTER_POS_A     180.0000
 #define DEFAULT_CHARACTER_POS_WORLD 0
 #define DEFAULT_CHARACTER_POS_INT   0
 #define DEFAULT_CHARACTER_CASH      500
@@ -18,7 +19,7 @@ enum e_Player_Character {
 	e_cName[MAX_PLAYER_NAME + 1],
 	e_cCash,
 	e_cSkin,
-	Float:e_cSpawnPos[3],
+	Float:e_cSpawnPos[4],
 	e_cSpawnInt,
 	e_cSpawnWorld,
 	e_cDeathStage
@@ -48,7 +49,7 @@ stock Character_LoadData(playerid) {
 		DB_GetConnectionHandle(),
 		query,
 		sizeof query,
-		"SELECT * FROM `characters` WHERE `name` = '%e' LIMIT 1",
+		"SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1",
 		gCharacter[playerid][e_cName]
 	);
 
@@ -63,21 +64,25 @@ public Character_SetData(playerid) {
 		return 1;
 	}
 
-	cache_get_value_int(0, "cash", gCharacter[playerid][e_cCash]);
-	cache_get_value_int(0, "skin", gCharacter[playerid][e_cSkin]);
+	cache_get_value_int(0, "Cash", gCharacter[playerid][e_cCash]);
+	cache_get_value_int(0, "Skin", gCharacter[playerid][e_cSkin]);
 
-	cache_get_value_float(0, "spawnX", gCharacter[playerid][e_cSpawnPos][0]);
-	cache_get_value_float(0, "spawnY", gCharacter[playerid][e_cSpawnPos][1]);
-	cache_get_value_float(0, "spawnZ", gCharacter[playerid][e_cSpawnPos][2]);
-	cache_get_value_int(0, "spawnInt", gCharacter[playerid][e_cSpawnInt]);
-	cache_get_value_int(0, "spawnWorld", gCharacter[playerid][e_cSpawnWorld]);
+	cache_get_value_float(0, "SpawnX", gCharacter[playerid][e_cSpawnPos][X]);
+	cache_get_value_float(0, "SpawnY", gCharacter[playerid][e_cSpawnPos][Y]);
+	cache_get_value_float(0, "SpawnZ", gCharacter[playerid][e_cSpawnPos][Z]);
+	cache_get_value_float(0, "SpawnA", gCharacter[playerid][e_cSpawnPos][ANGLE]);
+	cache_get_value_int(0, "SpawnInt", gCharacter[playerid][e_cSpawnInt]);
+	cache_get_value_int(0, "SpawnWorld", gCharacter[playerid][e_cSpawnWorld]);
+
+	SetSpawnPoint(playerid);
 	
 	SetSpawnInfo(
 		playerid,
 		0,
 		gCharacter[playerid][e_cSkin],
 		XYZ0(gCharacter[playerid][e_cSpawnPos]),
-		180.0, 0, 0, 0, 0, 0, 0
+		gCharacter[playerid][e_cSpawnPos][ANGLE],
+		0, 0, 0, 0, 0, 0
 	);
 
 	FormatCharacterName(playerid);
@@ -89,6 +94,18 @@ public Character_SetData(playerid) {
 
 stock Character_ResetData(playerid) {
 	memset(gCharacter[playerid], 0);
+}
+
+stock SetSpawnPoint(playerid) {
+	for (new i; i < 3; i++) {
+		if (gCharacter[playerid][e_cSpawnPos][i] == 0) break;
+		else return;
+	}
+
+	gCharacter[playerid][e_cSpawnPos][X] 		 = DEFAULT_CHARACTER_POS_X;
+	gCharacter[playerid][e_cSpawnPos][Y]     = DEFAULT_CHARACTER_POS_Y;
+	gCharacter[playerid][e_cSpawnPos][Z]     = DEFAULT_CHARACTER_POS_Z;
+	gCharacter[playerid][e_cSpawnPos][ANGLE] = DEFAULT_CHARACTER_POS_A;
 }
 
 static FormatCharacterName(playerid) {
