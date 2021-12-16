@@ -47,10 +47,14 @@
 #include "./chat/index"
 #include "./vehicle/index"
 #include "./admin/index"
+#include "./enters"
 
 main() {}
 
 public OnGameModeInit() {
+  SetGameModeText(GAMEMODE_TEXT);
+  SendRconCommand("hostname "SERVER_NAME);
+
   ShowNameTags(true);
   AllowInteriorWeapons(true);
   EnableStuntBonusForAll(false);
@@ -73,6 +77,7 @@ public OnGameModeUpdate() {
 }
 
 public OnGameModeExit() {
+  DB_ConnectionClose();
 
   return 1;
 }
