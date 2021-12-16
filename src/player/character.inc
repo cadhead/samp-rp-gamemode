@@ -12,7 +12,6 @@
 #define DEFAULT_CHARACTER_POS_A     180.0000
 #define DEFAULT_CHARACTER_POS_WORLD 0
 #define DEFAULT_CHARACTER_POS_INT   0
-#define DEFAULT_CHARACTER_CASH      500
 #define DEFAULT_CHARACTER_SKIN      2
 
 enum e_Player_Character {
@@ -28,17 +27,27 @@ enum e_Player_Character {
 new gCharacter[MAX_PLAYERS][e_Player_Character];
 new gCharacterFormatedName[MAX_PLAYERS][MAX_PLAYER_NAME];
 
+hook OnPlayerConnect(playerid) {
+  LoadCharacter(playerid);
+
+  return 1;
+}
+
+hook OnPlayerDisconnect(playerid) {
+  @__ResetCharacterState(playerid);
+
+  return 1;
+}
+
 hook OnPlayerSpawned(playerid) {
   GivePlayerMoney(playerid, gCharacter[playerid][e_cCash]);
   SetPlayerVirtualWorld(playerid, gCharacter[playerid][e_cSpawnWorld]);
   SetPlayerInterior(playerid, gCharacter[playerid][e_cSpawnInt]);
 
-  TogglePlayerSpectating(playerid, false);
-
   return 1;
 }
 
-stock Character_LoadData(playerid) {
+stock LoadCharacter(playerid) {
 	new
 		query[60 + MAX_PLAYER_NAME]
 	;
@@ -53,11 +62,11 @@ stock Character_LoadData(playerid) {
 		gCharacter[playerid][e_cName]
 	);
 
-	mysql_tquery(DB_GetConnectionHandle(), query, "Character_SetData", "i", playerid);
+	mysql_tquery(DB_GetConnectionHandle(), query, "@__SetCharacterState", "i", playerid);
 }
 
-forward Character_SetData(playerid);
-public Character_SetData(playerid) {
+@__SetCharacterState(playerid);
+@__SetCharacterState(playerid) {
 	if (cache_num_rows() == 0) {
 		KickPlayer(playerid, "Такого персонажа не существует.");
 
@@ -74,7 +83,7 @@ public Character_SetData(playerid) {
 	cache_get_value_int(0, "SpawnInt", gCharacter[playerid][e_cSpawnInt]);
 	cache_get_value_int(0, "SpawnWorld", gCharacter[playerid][e_cSpawnWorld]);
 
-	SetSpawnPoint(playerid);
+	SetSpawnPointDefault(playerid);
 	
 	SetSpawnInfo(
 		playerid,
@@ -92,12 +101,13 @@ public Character_SetData(playerid) {
 	return 1;
 }
 
-stock Character_ResetData(playerid) {
+@__ResetCharacterState(playerid);
+@__ResetCharacterState(playerid) {
 	memset(gCharacter[playerid], 0);
 }
 
-stock SetSpawnPoint(playerid) {
-	for (new i; i < 3; i++) {
+static SetSpawnPointDefault(playerid) {
+	for (new i; i < 3; i++) { // Check is character has no spawn point
 		if (gCharacter[playerid][e_cSpawnPos][i] == 0) break;
 		else return;
 	}
