@@ -17,10 +17,6 @@ hook OnGameModeInit() {
   DB_Connect(DATABASE_HOST, DATABASE_USER, DATABASE_PASSWD, DATABASE_NAME);
 }
 
-hook OnGameModeExit() {
-  DB_ConnectionClose();
-}
-
 public DB_Connect(const host[], const user[], const pass[], const db[]) {
   new MySQLOpt:option_id = mysql_init_options();
   mysql_set_option(option_id, AUTO_RECONNECT, true);
