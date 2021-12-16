@@ -57,6 +57,7 @@ public OnGameModeInit() {
 
   ShowNameTags(true);
   AllowInteriorWeapons(true);
+  DisableInteriorEnterExits();
   EnableStuntBonusForAll(false);
   ShowPlayerMarkers(false);
   ManualVehicleEngineAndLights();
