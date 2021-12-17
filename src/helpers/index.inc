@@ -79,3 +79,10 @@ stock Float:GetDistanceBetweenPlayers(p1, p2) {
 
 	return floatsqroot(rx + ry + rz);
 }
+
+stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z, virtualworld = -1, interiorid = -1) {
+	if (virtualworld != -1) SetPlayerVirtualWorld(playerid, virtualworld);
+	if (interiorid != -1) SetPlayerInterior(playerid, interiorid);
+
+	return SetPlayerPos(playerid, x, y, z);
+}

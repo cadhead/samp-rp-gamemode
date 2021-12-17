@@ -170,9 +170,7 @@ CMD:enter(playerid) {
     if (gEnter[i][e_PosEnterWorld] != GetPlayerVirtualWorld(playerid)) continue;
     if (gEnter[i][e_PosEnterInt] != GetPlayerInterior(playerid)) continue;
 
-    SetPlayerPos(playerid, XYZ0(gEnter[i][e_PosExit]));
-    SetPlayerVirtualWorld(playerid, gEnter[i][e_PosExitWorld]);
-    SetPlayerInterior(playerid, gEnter[i][e_PosExitInt]);
+    SetPlayerPosEx(playerid, XYZ0(gEnter[i][e_PosExit]), gEnter[i][e_PosExitWorld], gEnter[i][e_PosExitInt]);
     if (!isnull(gEnter[i][e_Desc])) {
       SendClientMessage(playerid, COLOR_ACTIONS, "* %s", false, gEnter[i][e_Desc]);
     }
@@ -189,9 +187,7 @@ CMD:exit(playerid) {
     if (gEnter[i][e_PosExitWorld] != GetPlayerVirtualWorld(playerid)) continue;
     if (gEnter[i][e_PosExitInt] != GetPlayerInterior(playerid)) continue;
 
-    SetPlayerPos(playerid, XYZ0(gEnter[i][e_PosEnter]));
-    SetPlayerVirtualWorld(playerid, gEnter[i][e_PosEnterWorld]);
-    SetPlayerInterior(playerid, gEnter[i][e_PosEnterInt]);
+    SetPlayerPosEx(playerid, XYZ0(gEnter[i][e_PosEnter]), gEnter[i][e_PosEnterWorld], gEnter[i][e_PosEnterInt]);
 
     return 1;
   }
