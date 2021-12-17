@@ -7,9 +7,9 @@
 #include <YSI_Coding\y_hooks>
 
 #define DATABASE_HOST     "localhost"
-#define DATABASE_USER     "root"
+#define DATABASE_USER     "samp"
 #define DATABASE_NAME     "srpgm"
-#define DATABASE_PASSWD   ""
+#define DATABASE_PASSWD   "admin"
 
 static MySQL:gConnectionHandle;
 
@@ -22,12 +22,7 @@ public DB_Connect(const host[], const user[], const pass[], const db[]) {
   mysql_set_option(option_id, AUTO_RECONNECT, true);
 
   gConnectionHandle = mysql_connect(host, user, pass, db);
-  mysql_tquery(gConnectionHandle, !"SET CHARACTER SET 'utf8'", "", "");
-  mysql_tquery(gConnectionHandle, !"SET NAMES 'utf8'", "", "");
-  mysql_tquery(gConnectionHandle, !"SET character_set_client = 'cp1251'", "", "");
-  mysql_tquery(gConnectionHandle, !"SET character_set_connection = 'cp1251'", "", "");
-  mysql_tquery(gConnectionHandle, !"SET character_set_results = 'cp1251'", "", "");
-  mysql_tquery(gConnectionHandle, !"SET SESSION collation_connection = 'utf8_general_ci'", "", "");
+  mysql_set_charset("cp1251");
 
   switch(mysql_errno()) {
     case 0: print("successfully connected to database.");
