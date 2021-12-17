@@ -6,6 +6,7 @@
 
 #include "./admin/vehicle.inc"
 #include "./admin/weapon.inc"
+#include "./admin/enters.inc"
 
 CMD:askin(playerid, params[]) {
 	new skinid, target;
