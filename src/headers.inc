@@ -6,6 +6,7 @@
 
 // General
 forward OnGameModeUpdate();
+forward OnWorldSave();
 
 // DB
 forward DB_Connect(const host[], const user[], const pass[], const db[]);

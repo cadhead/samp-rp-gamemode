@@ -65,7 +65,10 @@ public OnGameModeInit() {
   SetVehiclePassengerDamage(true);
   SetDisableSyncBugs(true);
 
+  new save_world_timing = DURATION(1 hour);
+
   SetTimer("OnGameModeUpdate", 500, true);
+  SetTimer("OnWorldSave", save_world_timing, true);
 
   AddPlayerClass(0, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
 
@@ -80,6 +83,10 @@ public OnGameModeUpdate() {
 public OnGameModeExit() {
   DB_ConnectionClose();
 
+  return 1;
+}
+
+public OnWorldSave() {
   return 1;
 }
 
