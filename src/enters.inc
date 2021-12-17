@@ -19,6 +19,7 @@ enum e_Enters {
   Float:e_PosExit[3],
   e_PosExitWorld,
   e_PosExitInt,
+  STREAMER_TAG_3D_TEXT_LABEL:e_Text3D,
   e_WantSave
 }
 
@@ -128,22 +129,30 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
   count++;
 }
 
-EntersDeleteOne(dbid) {
-  mysql_format(DB_GetConnectionHandle(), gString, sizeof gString, "DELETE FROM `enters` WHERE `ID` = %d", dbid);
-  mysql_query(DB_GetConnectionHandle(), gString);
+EntersDeleteOne(idx) {
+  new query[68 + 11];
+
+  mysql_format(DB_GetConnectionHandle(), query, sizeof query, "DELETE FROM `enters` WHERE `ID` = %d", gEnter[idx][e_ID]);
+  mysql_query(DB_GetConnectionHandle(), query);
+  
+  if (IsValidDynamic3DTextLabel(gEnter[idx][e_Text3D])) {
+    DestroyDynamic3DTextLabel(gEnter[idx][e_Text3D]);
+  }
+
+  memset(gEnter[idx]);
 }
 
-DeserializeEnterExitPos(id, const pos_enter[], const pos_exit[] ) {
+DeserializeEnterExitPos(idx, const pos_enter[], const pos_exit[] ) {
   sscanf(pos_enter, "p<|>fffii", 
-    XYZ0(gEnter[id][e_PosEnter]),
-    gEnter[id][e_PosEnterWorld],
-    gEnter[id][e_PosEnterInt]
+    XYZ0(gEnter[idx][e_PosEnter]),
+    gEnter[idx][e_PosEnterWorld],
+    gEnter[idx][e_PosEnterInt]
   );
 
   sscanf(pos_exit, "p<|>fffii", 
-    XYZ0(gEnter[id][e_PosExit]),
-    gEnter[id][e_PosExitWorld],
-    gEnter[id][e_PosExitInt]
+    XYZ0(gEnter[idx][e_PosExit]),
+    gEnter[idx][e_PosExitWorld],
+    gEnter[idx][e_PosExitInt]
   );
 }
 
@@ -196,15 +205,15 @@ CMD:exit(playerid) {
   return 1;
 }
 
-static CreateEnter3DText(enterid) {
+static CreateEnter3DText(idx) {
   gString[0] = EOS;
-  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[enterid][e_Name], gEnter[enterid][e_ID]);
-  CreateDynamic3DTextLabel(
+  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[idx][e_Name], gEnter[idx][e_ID]);
+  gEnter[idx][e_Text3D] = CreateDynamic3DTextLabel(
     gString,
     COLOR_BLUE,
-    XYZ0(gEnter[enterid][e_PosEnter]), 4.0, 
+    XYZ0(gEnter[idx][e_PosEnter]), 4.0, 
     INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 
-    gEnter[enterid][e_PosEnterWorld], gEnter[enterid][e_PosEnterInt]
+    gEnter[idx][e_PosEnterWorld], gEnter[idx][e_PosEnterInt]
   );
 }
 
