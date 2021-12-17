@@ -226,3 +226,13 @@ static CreateEnter3DText(idx) {
 stock GetEntersCount() {
   return count;
 }
+
+stock FindEnterByID(enterid) {
+  for (new i; i < count; i++) {
+    if (gEnter[i][e_ID] != enterid) continue;
+
+    return i;
+  }
+
+  return -1;
+}
