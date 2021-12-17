@@ -54,7 +54,11 @@ static LoadEnters() {
 
 @__SetEntersState();
 @__SetEntersState() {
-  new row_count;
+  new 
+    row_count,
+    pos_enter[64],
+    pos_exit[64]
+  ;
 
   cache_get_row_count(row_count);
 
@@ -62,18 +66,9 @@ static LoadEnters() {
     cache_get_value_int(i, "ID", gEnter[i][e_ID]);
     cache_get_value(i, "Name", gEnter[i][e_Name]);
     cache_get_value(i, "Description", gEnter[i][e_Desc]);
-    cache_get_value(i, "EnterPos", gString);
-    sscanf(gString, "p<|>fffii", 
-      XYZ0(gEnter[i][e_PosEnter]),
-      gEnter[i][e_PosEnterWorld],
-      gEnter[i][e_PosEnterInt]
-    );
-    cache_get_value(i, "ExitPos", gString);
-    sscanf(gString, "p<|>fffii", 
-      XYZ0(gEnter[i][e_PosExit]),
-      gEnter[i][e_PosExitWorld],
-      gEnter[i][e_PosExitInt]
-    );
+    cache_get_value(i, "EnterPos", pos_enter);
+    cache_get_value(i, "ExitPos", pos_exit);
+    DeserializeEnterExitPos(count, pos_enter, pos_exit);
     cache_get_value_int(i, "CreatedBy", gEnter[i][e_CreatedBy]);
 
     count++;
@@ -122,17 +117,8 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
 
   gEnter[count][e_ID] = cache_insert_id();
   gEnter[count][e_CreatedBy] = accountid;
-  sscanf(pos_enter, "p<|>fffii", 
-    XYZ0(gEnter[count][e_PosEnter]),
-    gEnter[count][e_PosEnterWorld],
-    gEnter[count][e_PosEnterInt]
-  );
 
-  sscanf(pos_exit, "p<|>fffii", 
-    XYZ0(gEnter[count][e_PosExit]),
-    gEnter[count][e_PosExitWorld],
-    gEnter[count][e_PosExitInt]
-  );
+  DeserializeEnterExitPos(count, pos_enter, pos_exit);
 
   strcopy(gEnter[count][e_Name], name);
   strcopy(gEnter[count][e_Desc], desc);
@@ -144,6 +130,20 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
 
 EntersDeleteOne(id) {
 
+}
+
+DeserializeEnterExitPos(id, const pos_enter[], const pos_exit[] ) {
+  sscanf(pos_enter, "p<|>fffii", 
+    XYZ0(gEnter[id][e_PosEnter]),
+    gEnter[id][e_PosEnterWorld],
+    gEnter[id][e_PosEnterInt]
+  );
+
+  sscanf(pos_exit, "p<|>fffii", 
+    XYZ0(gEnter[id][e_PosExit]),
+    gEnter[id][e_PosExitWorld],
+    gEnter[id][e_PosExitInt]
+  );
 }
 
 hook function SetPlayerPos(playerid, Float:x, Float:y, Float:z) {
