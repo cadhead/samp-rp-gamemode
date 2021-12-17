@@ -29,6 +29,8 @@ new gString[256], gStringSmall[64], gStringLarge[2048];
 #define Y     1
 #define Z     2
 #define ANGLE 3
+#define VW    4
+#define INT   5
 
 stock DIALOG_OK[] = "OK";
 stock DIALOG_ACCEPT[] = "Принять";
