@@ -84,8 +84,8 @@ static LoadEnters() {
 static SaveEnters() {
   static const 
     queryStr[] = "UPDATE `enters`\
-    SET `Name` = '%s',\
-    `Description` = '%s'\
+    SET `Name` = '%e',\
+    `Description` = '%e'\
     WHERE `ID` = '%d'"
   ; // 92
 
@@ -112,13 +112,34 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
   static const 
     queryStr[] = "INSERT INTO `enters`\
     (`EnterPos`, `ExitPos`, `Name`, `Description`, `CreatedBy`)\
-    VALUES ('%s', '%s', '%s', '%s', '%d')"
+    VALUES ('%e', '%e', '%e', '%e', '%d')"
   ; // 128
 
   new query[128 + 64 + 64 + 32 + 144];
 
   mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, name, desc, accountid);
   mysql_query(DB_GetConnectionHandle(), query);
+
+  gEnter[count][e_ID] = cache_insert_id();
+  gEnter[count][e_CreatedBy] = accountid;
+  sscanf(pos_enter, "p<|>fffii", 
+    XYZ0(gEnter[count][e_PosEnter]),
+    gEnter[count][e_PosEnterWorld],
+    gEnter[count][e_PosEnterInt]
+  );
+
+  sscanf(pos_exit, "p<|>fffii", 
+    XYZ0(gEnter[count][e_PosExit]),
+    gEnter[count][e_PosExitWorld],
+    gEnter[count][e_PosExitInt]
+  );
+
+  strcopy(gEnter[count][e_Name], name);
+  strcopy(gEnter[count][e_Desc], desc);
+
+  CreateEnter3DText(count);
+
+  count++;
 }
 
 EntersDeleteOne(id) {
