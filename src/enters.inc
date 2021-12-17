@@ -173,7 +173,9 @@ CMD:enter(playerid) {
     SetPlayerPos(playerid, XYZ0(gEnter[i][e_PosExit]));
     SetPlayerVirtualWorld(playerid, gEnter[i][e_PosExitWorld]);
     SetPlayerInterior(playerid, gEnter[i][e_PosExitInt]);
-    SendClientMessage(playerid, COLOR_ACTIONS, "* %s", false, gEnter[i][e_Desc]);
+    if (!isnull(gEnter[i][e_Desc])) {
+      SendClientMessage(playerid, COLOR_ACTIONS, "* %s", false, gEnter[i][e_Desc]);
+    }
 
     return 1;
   }
