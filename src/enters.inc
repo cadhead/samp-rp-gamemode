@@ -37,6 +37,17 @@ hook OnGameModeExit() {
   return 1;
 }
 
+hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
+  switch (newkeys) {
+    case KEY_YES: {
+      callcmd::enter(playerid);
+      callcmd::exit(playerid);
+    }
+  }
+
+  return 1;
+}
+
 static LoadEnters() {
   mysql_tquery(DB_GetConnectionHandle(), "SELECT * FROM `enters`", "@__SetEntersState");
 }
@@ -82,6 +93,9 @@ static SaveEnters() {
 
   for (new i; i < count; i++) {
     if (!gEnter[i][e_WantSave]) continue;
+
+    gEnter[i][e_WantSave] = 0;
+
     mysql_format(DB_GetConnectionHandle(),
       query, sizeof query,
       queryStr,
@@ -92,6 +106,41 @@ static SaveEnters() {
 
     mysql_tquery(DB_GetConnectionHandle(), query);
   }
+}
+
+EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "", accountid = -1) {
+  static const 
+    queryStr[] = "INSERT INTO `enters`\
+    (`EnterPos`, `ExitPos`, `Name`, `Description`, `CreatedBy`)\
+    VALUES ('%s', '%s', '%s', '%s', '%d')"
+  ; // 128
+
+  new query[128 + 64 + 64 + 32 + 144];
+
+  mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, name, desc, accountid);
+  mysql_query(DB_GetConnectionHandle(), query);
+}
+
+EntersDeleteOne(id) {
+
+}
+
+hook function SetPlayerPos(playerid, Float:x, Float:y, Float:z) {
+  new
+    items[1],
+    streamer_count = Streamer_GetNearbyItems(x, y, z, STREAMER_TYPE_OBJECT, items, sizeof(items), 300.0),
+    freeze_time = (GetPlayerPing(playerid) * 4) + (streamer_count * 2) + 1550
+  ;
+
+  Streamer_UpdateEx(playerid, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+
+  if (!GetPVarInt(playerid, "IsFrozen") && streamer_count) {
+    TogglePlayerControllable(playerid, 0);
+    SetTimerEx(!"@__UnFreezePlayer", freeze_time, false, !"d", playerid);
+    SetPVarInt(playerid, "IsFrozen", 1);
+  }
+
+  continue(playerid, x, y, z + 0.3);
 }
 
 CMD:enter(playerid) {
@@ -129,7 +178,7 @@ CMD:exit(playerid) {
 
 static CreateEnter3DText(enterid) {
   gString[0] = EOS;
-  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"F/ENTER", gEnter[enterid][e_Name], gEnter[enterid][e_ID]);
+  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[enterid][e_Name], gEnter[enterid][e_ID]);
   CreateDynamic3DTextLabel(
     gString,
     COLOR_BLUE,
@@ -137,4 +186,10 @@ static CreateEnter3DText(enterid) {
     INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 
     gEnter[enterid][e_PosEnterWorld], gEnter[enterid][e_PosEnterInt]
   );
+}
+
+@__UnFreezePlayer(playerid);
+@__UnFreezePlayer(playerid) {
+  SetPVarInt(playerid, "IsFrozen", 0);
+  TogglePlayerControllable(playerid, 1);
 }
