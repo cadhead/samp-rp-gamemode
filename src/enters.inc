@@ -128,8 +128,9 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
   count++;
 }
 
-EntersDeleteOne(id) {
-
+EntersDeleteOne(dbid) {
+  mysql_format(DB_GetConnectionHandle(), gString, sizeof gString, "DELETE FROM `enters` WHERE `ID` = %d", dbid);
+  mysql_query(DB_GetConnectionHandle(), gString);
 }
 
 DeserializeEnterExitPos(id, const pos_enter[], const pos_exit[] ) {
