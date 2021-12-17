@@ -44,3 +44,12 @@ CMD:addenter(playerid, params[]) {
 
   return 1;
 }
+
+CMD:delenter(playerid, params[]) {
+  extract params -> new idx; else return 1;
+  if (idx >= GetEntersCount()) return 1;
+
+  EntersDeleteOne(idx);
+
+  return 1;
+}

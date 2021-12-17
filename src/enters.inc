@@ -222,3 +222,7 @@ static CreateEnter3DText(idx) {
   SetPVarInt(playerid, "IsFrozen", 0);
   TogglePlayerControllable(playerid, 1);
 }
+
+stock GetEntersCount() {
+  return count;
+}
