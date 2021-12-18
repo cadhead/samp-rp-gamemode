@@ -15,3 +15,9 @@ forward MySQL:DB_GetConnectionHandle();
 
 // Player
 forward OnPlayerSpawned(playerid);
+
+// Other
+forward OnEnterStart(playerid, enteridx);
+forward OnExitStart(playerid, enteridx);
+forward OnEnterDone(playerid, enteridx);
+forward OnExitDone(playerid, enteridx);

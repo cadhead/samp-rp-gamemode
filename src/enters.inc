@@ -49,6 +49,11 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
   return 1;
 }
 
+public OnEnterStart(playerid, enteridx) { return 1; }
+public OnExitStart(playerid, enteridx) { return 1; }
+public OnEnterDone(playerid, enteridx) { return 1; }
+public OnExitDone(playerid, enteridx) { return 1; }
+
 static LoadEnters() {
   mysql_tquery(DB_GetConnectionHandle(), "SELECT * FROM `enters`", "@__SetEntersState");
 }
@@ -163,8 +168,6 @@ hook function SetPlayerPos(playerid, Float:x, Float:y, Float:z) {
     freeze_time = (GetPlayerPing(playerid) * 4) + (streamer_count * 2) + 1550
   ;
 
-  Streamer_UpdateEx(playerid, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
-
   if (!GetPVarInt(playerid, "IsFrozen") && streamer_count) {
     TogglePlayerControllable(playerid, 0);
     SetTimerEx(!"@__UnFreezePlayer", freeze_time, false, !"d", playerid);
@@ -179,13 +182,14 @@ CMD:enter(playerid) {
     if (!IsPlayerInRangeOfPoint(playerid, 2.0, XYZ0(Enter[i][e_PosEnter]))) continue;
     if (Enter[i][e_PosEnterWorld] != GetPlayerVirtualWorld(playerid)) continue;
     if (Enter[i][e_PosEnterInt] != GetPlayerInterior(playerid)) continue;
+    if (!OnEnterStart(playerid, i)) continue;
 
     SetPlayerPosEx(playerid, XYZ0(Enter[i][e_PosExit]), Enter[i][e_PosExitWorld], Enter[i][e_PosExitInt]);
     if (!isnull(Enter[i][e_Desc])) {
       SendClientMessage(playerid, COLOR_ACTIONS, "* %s", false, Enter[i][e_Desc]);
     }
 
-    return 1;
+    return OnEnterDone(playerid, i);
   }
 
   return 1;
@@ -196,10 +200,11 @@ CMD:exit(playerid) {
     if (!IsPlayerInRangeOfPoint(playerid, 2.0, XYZ0(Enter[i][e_PosExit]))) continue;
     if (Enter[i][e_PosExitWorld] != GetPlayerVirtualWorld(playerid)) continue;
     if (Enter[i][e_PosExitInt] != GetPlayerInterior(playerid)) continue;
+    if (!OnExitStart(playerid, i)) continue;
 
     SetPlayerPosEx(playerid, XYZ0(Enter[i][e_PosEnter]), Enter[i][e_PosEnterWorld], Enter[i][e_PosEnterInt]);
 
-    return 1;
+    return OnExitDone(playerid, i);
   }
 
   return 1;
@@ -227,7 +232,7 @@ stock GetEntersCount() {
   return count;
 }
 
-stock FindEnterByID(enterid) {
+static GetEnterIndex(enterid) {
   for (new i; i < count; i++) {
     if (Enter[i][e_ID] != enterid) continue;
 
@@ -235,4 +240,8 @@ stock FindEnterByID(enterid) {
   }
 
   return -1;
+}
+
+stock GetEnterID(idx) {
+  return Enter[idx][e_ID];
 }

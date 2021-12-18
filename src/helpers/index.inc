@@ -84,5 +84,7 @@ stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z, virtualworld = -1, int
 	if (virtualworld != -1) SetPlayerVirtualWorld(playerid, virtualworld);
 	if (interiorid != -1) SetPlayerInterior(playerid, interiorid);
 
+	Streamer_UpdateEx(playerid, x, y, z, GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid));
+
 	return SetPlayerPos(playerid, x, y, z);
 }
