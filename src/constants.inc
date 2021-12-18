@@ -7,8 +7,8 @@
 #define SERVER_NAME   "Just another SA:MP Server"
 #define MODE_NAME     "SRPGM"
 #define VERSION_MAJOR 0
-#define VERSION_MINOR 7
-#define VERSION_BUILD 2
+#define VERSION_MINOR 8
+#define VERSION_BUILD 1
 #define VERSION_EXTRA ""
 
 #define VERSION_STRING "v" #VERSION_MAJOR "." #VERSION_MINOR "." #VERSION_BUILD VERSION_EXTRA
