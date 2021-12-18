@@ -8,7 +8,7 @@
 #define COLOR_BLACK      0x000000FF
 #define COLOR_GREY       0xBFC0C2FF
 #define COLOR_YELLOW     0xFFF666FF
-#define COLOR_GREEN      0x33FF33FF
+#define COLOR_GREEN      0x96DC64FF
 #define COLOR_LIGHTGREEN 0xA1CC82FF
 #define COLOR_BLUE       0x0095ffff
 #define COLOR_SKYBLUE    0x87CEEBFF
@@ -43,7 +43,7 @@
 #define cBLACK      "{000000}"
 #define cGREY       "{BFC0C2}"
 #define cYELLOW     "{FFF666}"
-#define cGREEN      "{33FF33}"
+#define cGREEN      "{96DC64}"
 #define cLIGHTGREEN "{A1CC82}"
 #define cBLUE       "{0095ff}"
 #define cSKYBLUE    "{87CEEB}"
