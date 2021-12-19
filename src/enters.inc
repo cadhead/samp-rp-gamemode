@@ -6,25 +6,25 @@
 
 #include <YSI_Coding\y_hooks>
 
-#define MAX_ENTERS 256
+#define MAX_ENTERS 1024
 
-static enum e_Enters {
-  e_ID,
-  e_Name[32],
-  e_Desc[144],
-  e_CreatedBy,
-  Float:e_PosEnter[3],
-  e_PosEnterWorld,
-  e_PosEnterInt,
-  Float:e_PosExit[3],
-  e_PosExitWorld,
-  e_PosExitInt,
-  STREAMER_TAG_3D_TEXT_LABEL:e_Text3D,
-  e_WantSave
+enum e_Enters {
+  e_enID,
+  e_enName[64],
+  e_enDesc[144],
+  e_enCreatedBy,
+  Float:e_enPosEnter[3],
+  e_enPosEnterWorld,
+  e_enPosEnterInt,
+  Float:e_enPosExit[3],
+  e_enPosExitWorld,
+  e_enPosExitInt,
+  STREAMER_TAG_3D_TEXT_LABEL:e_enText3D
 }
 
-static Enter[MAX_ENTERS][e_Enters];
+new gEnter[MAX_ENTERS][e_Enters];
 static count = 0;
+static want_save[MAX_ENTERS] = false;
 
 hook OnGameModeInit() {
   LoadEnters();
@@ -69,13 +69,13 @@ static LoadEnters() {
   cache_get_row_count(row_count);
 
   for (new i; i < row_count; i++) {
-    cache_get_value_int(i, "ID", Enter[i][e_ID]);
-    cache_get_value(i, "Name", Enter[i][e_Name]);
-    cache_get_value(i, "Description", Enter[i][e_Desc]);
+    cache_get_value_int(i, "ID", gEnter[i][e_enID]);
+    cache_get_value(i, "Name", gEnter[i][e_enName]);
+    cache_get_value(i, "Description", gEnter[i][e_enDesc]);
     cache_get_value(i, "EnterPos", pos_enter);
     cache_get_value(i, "ExitPos", pos_exit);
     DeserializeEnterExitPos(count, pos_enter, pos_exit);
-    cache_get_value_int(i, "CreatedBy", Enter[i][e_CreatedBy]);
+    cache_get_value_int(i, "CreatedBy", gEnter[i][e_enCreatedBy]);
 
     count++;
     CreateEnter3DText(i);
@@ -93,16 +93,16 @@ static SaveEnters() {
   new query[92 + 32 + 144 + 11];
 
   for (new i; i < count; i++) {
-    if (!Enter[i][e_WantSave]) continue;
+    if (!want_save[i]) continue;
 
-    Enter[i][e_WantSave] = 0;
+    want_save[i] = false;
 
     mysql_format(DB_GetConnectionHandle(),
       query, sizeof query,
       queryStr,
-      Enter[i][e_Name],
-      Enter[i][e_Desc],
-      Enter[i][e_ID]
+      gEnter[i][e_enName],
+      gEnter[i][e_enDesc],
+      gEnter[i][e_enID]
     );
 
     mysql_tquery(DB_GetConnectionHandle(), query);
@@ -121,13 +121,13 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
   mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, name, desc, accountid);
   mysql_query(DB_GetConnectionHandle(), query);
 
-  Enter[count][e_ID] = cache_insert_id();
-  Enter[count][e_CreatedBy] = accountid;
+  gEnter[count][e_enID] = cache_insert_id();
+  gEnter[count][e_enCreatedBy] = accountid;
 
   DeserializeEnterExitPos(count, pos_enter, pos_exit);
 
-  strcopy(Enter[count][e_Name], name);
-  strcopy(Enter[count][e_Desc], desc);
+  strcopy(gEnter[count][e_enName], name);
+  strcopy(gEnter[count][e_enDesc], desc);
 
   CreateEnter3DText(count);
 
@@ -137,27 +137,27 @@ EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "
 EntersDeleteOne(idx) {
   new query[68 + 11];
 
-  mysql_format(DB_GetConnectionHandle(), query, sizeof query, "DELETE FROM `enters` WHERE `ID` = %d", Enter[idx][e_ID]);
+  mysql_format(DB_GetConnectionHandle(), query, sizeof query, "DELETE FROM `enters` WHERE `ID` = %d", gEnter[idx][e_enID]);
   mysql_query(DB_GetConnectionHandle(), query);
   
-  if (IsValidDynamic3DTextLabel(Enter[idx][e_Text3D])) {
-    DestroyDynamic3DTextLabel(Enter[idx][e_Text3D]);
+  if (IsValidDynamic3DTextLabel(gEnter[idx][e_enText3D])) {
+    DestroyDynamic3DTextLabel(gEnter[idx][e_enText3D]);
   }
 
-  memset(Enter[idx]);
+  memset(gEnter[idx]);
 }
 
 DeserializeEnterExitPos(idx, const pos_enter[], const pos_exit[] ) {
   sscanf(pos_enter, "p<|>fffii", 
-    XYZ0(Enter[idx][e_PosEnter]),
-    Enter[idx][e_PosEnterWorld],
-    Enter[idx][e_PosEnterInt]
+    XYZ0(gEnter[idx][e_enPosEnter]),
+    gEnter[idx][e_enPosEnterWorld],
+    gEnter[idx][e_enPosEnterInt]
   );
 
   sscanf(pos_exit, "p<|>fffii", 
-    XYZ0(Enter[idx][e_PosExit]),
-    Enter[idx][e_PosExitWorld],
-    Enter[idx][e_PosExitInt]
+    XYZ0(gEnter[idx][e_enPosExit]),
+    gEnter[idx][e_enPosExitWorld],
+    gEnter[idx][e_enPosExitInt]
   );
 }
 
@@ -179,14 +179,14 @@ hook function SetPlayerPos(playerid, Float:x, Float:y, Float:z) {
 
 CMD:enter(playerid) {
   for (new i; i < count; i++) {
-    if (!IsPlayerInRangeOfPoint(playerid, 2.0, XYZ0(Enter[i][e_PosEnter]))) continue;
-    if (Enter[i][e_PosEnterWorld] != GetPlayerVirtualWorld(playerid)) continue;
-    if (Enter[i][e_PosEnterInt] != GetPlayerInterior(playerid)) continue;
+    if (!IsPlayerInRangeOfPoint(playerid, 2.0, XYZ0(gEnter[i][e_enPosEnter]))) continue;
+    if (gEnter[i][e_enPosEnterWorld] != GetPlayerVirtualWorld(playerid)) continue;
+    if (gEnter[i][e_enPosEnterInt] != GetPlayerInterior(playerid)) continue;
     if (!OnEnterStart(playerid, i)) continue;
 
-    SetPlayerPosEx(playerid, XYZ0(Enter[i][e_PosExit]), Enter[i][e_PosExitWorld], Enter[i][e_PosExitInt]);
-    if (!isnull(Enter[i][e_Desc])) {
-      SendClientMessage(playerid, COLOR_ACTIONS, "* %s", false, Enter[i][e_Desc]);
+    SetPlayerPosEx(playerid, XYZ0(gEnter[i][e_enPosExit]), gEnter[i][e_enPosExitWorld], gEnter[i][e_enPosExitInt]);
+    if (!isnull(gEnter[i][e_enDesc])) {
+      SendClientMessage(playerid, COLOR_ACTIONS, "* %s", false, gEnter[i][e_enDesc]);
     }
 
     return OnEnterDone(playerid, i);
@@ -197,12 +197,12 @@ CMD:enter(playerid) {
 
 CMD:exit(playerid) {
   for (new i; i < count; i++) {
-    if (!IsPlayerInRangeOfPoint(playerid, 2.0, XYZ0(Enter[i][e_PosExit]))) continue;
-    if (Enter[i][e_PosExitWorld] != GetPlayerVirtualWorld(playerid)) continue;
-    if (Enter[i][e_PosExitInt] != GetPlayerInterior(playerid)) continue;
+    if (!IsPlayerInRangeOfPoint(playerid, 2.0, XYZ0(gEnter[i][e_enPosExit]))) continue;
+    if (gEnter[i][e_enPosExitWorld] != GetPlayerVirtualWorld(playerid)) continue;
+    if (gEnter[i][e_enPosExitInt] != GetPlayerInterior(playerid)) continue;
     if (!OnExitStart(playerid, i)) continue;
 
-    SetPlayerPosEx(playerid, XYZ0(Enter[i][e_PosEnter]), Enter[i][e_PosEnterWorld], Enter[i][e_PosEnterInt]);
+    SetPlayerPosEx(playerid, XYZ0(gEnter[i][e_enPosEnter]), gEnter[i][e_enPosEnterWorld], gEnter[i][e_enPosEnterInt]);
 
     return OnExitDone(playerid, i);
   }
@@ -211,14 +211,17 @@ CMD:exit(playerid) {
 }
 
 static CreateEnter3DText(idx) {
-  gString[0] = EOS;
-  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", Enter[idx][e_Name], Enter[idx][e_ID]);
-  Enter[idx][e_Text3D] = CreateDynamic3DTextLabel(
+  if (gEnter[idx][e_enText3D]) {
+    DestroyDynamic3DTextLabel(gEnter[idx][e_enText3D]);
+  }
+
+  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[idx][e_enName]);
+  gEnter[idx][e_enText3D] = CreateDynamic3DTextLabel(
     gString,
     COLOR_BLUE,
-    XYZ0(Enter[idx][e_PosEnter]), 4.0, 
+    XYZ0(gEnter[idx][e_enPosEnter]), 4.0, 
     INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 
-    Enter[idx][e_PosEnterWorld], Enter[idx][e_PosEnterInt]
+    gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]
   );
 }
 
@@ -232,9 +235,9 @@ stock GetEntersCount() {
   return count;
 }
 
-static GetEnterIndex(enterid) {
+stock GetEnterIndex(enterid) {
   for (new i; i < count; i++) {
-    if (Enter[i][e_ID] != enterid) continue;
+    if (gEnter[i][e_enID] != enterid) continue;
 
     return i;
   }
@@ -243,5 +246,16 @@ static GetEnterIndex(enterid) {
 }
 
 stock GetEnterID(idx) {
-  return Enter[idx][e_ID];
+  return gEnter[idx][e_enID];
+}
+
+stock SetEnterName(enterid, const newname[]) {
+  new idx = GetEnterIndex(enterid);
+
+  printf("idx: %d", idx);
+
+  strcopy(gEnter[idx][e_enName], newname);
+
+  want_save[idx] = true;
+  CreateEnter3DText(idx);
 }
