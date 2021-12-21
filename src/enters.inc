@@ -62,6 +62,11 @@ public OnEnterStart(playerid, enteridx) { return 1; }
 public OnExitStart(playerid, enteridx) { return 1; }
 public OnEnterDone(playerid, enteridx) { return 1; }
 public OnExitDone(playerid, enteridx) { return 1; }
+static OnEnterStateSet(idx) {
+  if (gEnter[idx][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(idx);
+
+  want_save[idx] = true;
+}
 
 static LoadEnters() {
   mysql_tquery(DB_GetConnectionHandle(), "SELECT * FROM `enters`", "@__SetEntersState", "i", GetTickCount());
@@ -85,7 +90,7 @@ static LoadEnters() {
     DeserializeEnterExitPos(count, pos_enter, pos_exit);
     cache_get_value_int(i, "Type", gEnter[i][e_enType]);
 
-    if (gEnter[i][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(i);
+    OnEnterStateSet(i);
   }
 
   gEntersIsLoaded = true;
@@ -138,7 +143,7 @@ EntersAddOne(const name[], const pos_enter[], const pos_exit[], const desc[] = "
   strcopy(gEnter[count][e_enName], name);
   strcopy(gEnter[count][e_enDesc], desc);
 
-  if (gEnter[count][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(count);
+  OnEnterStateSet(count);
 
   count++;
 }
@@ -261,5 +266,5 @@ stock SetEnterName(enterid, const newname[]) {
 
   strcopy(gEnter[idx][e_enName], newname);
 
-  want_save[idx] = true;
+  OnEnerStateSet(idx);
 }
