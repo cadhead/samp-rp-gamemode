@@ -8,11 +8,14 @@
 
 #define MAX_ENTERS 1024
 
+#define ENTER_TYPE_WHNOKNOWS 0
+#define ENTER_TYPE_PROPERTY  1
+
 enum e_Enters {
   e_enID,
   e_enName[64],
   e_enDesc[144],
-  e_enCreatedBy,
+  e_enType,
   Float:e_enPosEnter[3],
   e_enPosEnterWorld,
   e_enPosEnterInt,
@@ -23,8 +26,14 @@ enum e_Enters {
 }
 
 new gEnter[MAX_ENTERS][e_Enters];
+new bool:gEntersIsLoaded;
+
 static count = 0;
-static want_save[MAX_ENTERS] = false;
+static bool:want_save[MAX_ENTERS];
+
+#define GetEnterID(%0)   gEnter[%0][e_enID]
+#define GetEnterName(%0) gEnter[%0][e_enName]
+#define GetEnterDesc(%0) gEnter[%0][e_enDesc]
 
 hook OnGameModeInit() {
   LoadEnters();
@@ -55,31 +64,32 @@ public OnEnterDone(playerid, enteridx) { return 1; }
 public OnExitDone(playerid, enteridx) { return 1; }
 
 static LoadEnters() {
-  mysql_tquery(DB_GetConnectionHandle(), "SELECT * FROM `enters`", "@__SetEntersState");
+  mysql_tquery(DB_GetConnectionHandle(), "SELECT * FROM `enters`", "@__SetEntersState", "i", GetTickCount());
 }
 
-@__SetEntersState();
-@__SetEntersState() {
-  new 
-    row_count,
+@__SetEntersState(loadStatrtTime);
+@__SetEntersState(loadStatrtTime) {
+  new
     pos_enter[64],
     pos_exit[64]
   ;
 
-  cache_get_row_count(row_count);
+  cache_get_row_count(count);
 
-  for (new i; i < row_count; i++) {
+  for (new i; i < count; i++) {
     cache_get_value_int(i, "ID", gEnter[i][e_enID]);
     cache_get_value(i, "Name", gEnter[i][e_enName]);
     cache_get_value(i, "Description", gEnter[i][e_enDesc]);
     cache_get_value(i, "EnterPos", pos_enter);
     cache_get_value(i, "ExitPos", pos_exit);
     DeserializeEnterExitPos(count, pos_enter, pos_exit);
-    cache_get_value_int(i, "CreatedBy", gEnter[i][e_enCreatedBy]);
+    cache_get_value_int(i, "Type", gEnter[i][e_enType]);
 
-    count++;
-    CreateEnter3DText(i);
+    if (gEnter[i][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(i);
   }
+
+  gEntersIsLoaded = true;
+  printf("Number of enters: %d, took %d ms ", count, GetTickCount() - loadStatrtTime);
 }
 
 static SaveEnters() {
@@ -109,27 +119,26 @@ static SaveEnters() {
   }
 }
 
-EntersAddOne(const pos_enter[], const pos_exit[], const name[], const desc[] = "", accountid = -1) {
+EntersAddOne(const name[], const pos_enter[], const pos_exit[], const desc[] = "", type = ENTER_TYPE_WHNOKNOWS) {
   static const 
     queryStr[] = "INSERT INTO `enters`\
-    (`EnterPos`, `ExitPos`, `Name`, `Description`, `CreatedBy`)\
-    VALUES ('%e', '%e', '%e', '%e', '%d')"
+    (`EnterPos`, `ExitPos`, `Type`, `Name`, `Description`)\
+    VALUES ('%e', '%e', %d, '%e', '%e')"
   ; // 128
 
   new query[128 + 64 + 64 + 32 + 144];
 
-  mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, name, desc, accountid);
+  mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, type, name, desc);
   mysql_query(DB_GetConnectionHandle(), query);
 
   gEnter[count][e_enID] = cache_insert_id();
-  gEnter[count][e_enCreatedBy] = accountid;
 
   DeserializeEnterExitPos(count, pos_enter, pos_exit);
 
   strcopy(gEnter[count][e_enName], name);
   strcopy(gEnter[count][e_enDesc], desc);
 
-  CreateEnter3DText(count);
+  if (gEnter[count][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(count);
 
   count++;
 }
@@ -245,17 +254,12 @@ stock GetEnterIndex(enterid) {
   return -1;
 }
 
-stock GetEnterID(idx) {
-  return gEnter[idx][e_enID];
-}
-
 stock SetEnterName(enterid, const newname[]) {
   new idx = GetEnterIndex(enterid);
 
-  printf("idx: %d", idx);
+  if (idx < 0) return;
 
   strcopy(gEnter[idx][e_enName], newname);
 
   want_save[idx] = true;
-  CreateEnter3DText(idx);
 }
