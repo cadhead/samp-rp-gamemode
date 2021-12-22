@@ -75,13 +75,15 @@ stock LoadCharacter(playerid) {
 
 	cache_get_value_int(0, "Cash", gCharacter[playerid][e_cCash]);
 	cache_get_value_int(0, "Skin", gCharacter[playerid][e_cSkin]);
-
-	cache_get_value_float(0, "SpawnX", gCharacter[playerid][e_cSpawnPos][X]);
-	cache_get_value_float(0, "SpawnY", gCharacter[playerid][e_cSpawnPos][Y]);
-	cache_get_value_float(0, "SpawnZ", gCharacter[playerid][e_cSpawnPos][Z]);
-	cache_get_value_float(0, "SpawnA", gCharacter[playerid][e_cSpawnPos][ANGLE]);
-	cache_get_value_int(0, "SpawnInt", gCharacter[playerid][e_cSpawnInt]);
-	cache_get_value_int(0, "SpawnWorld", gCharacter[playerid][e_cSpawnWorld]);
+	cache_get_value(0, "SpawnPos", gStringSmall);
+	sscanf(gStringSmall, "p<|>ffffii", 
+		gCharacter[playerid][e_cSpawnPos][X],
+		gCharacter[playerid][e_cSpawnPos][Y],
+		gCharacter[playerid][e_cSpawnPos][Z],
+		gCharacter[playerid][e_cSpawnPos][ANGLE],
+		gCharacter[playerid][e_cSpawnWorld],
+		gCharacter[playerid][e_cSpawnInt]
+	);
 
 	SetSpawnPointDefault(playerid);
 	
