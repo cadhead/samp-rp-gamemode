@@ -16,7 +16,7 @@ CMD:addenter(playerid, params[]) {
     if (!GetPVarInt(playerid, "cmd_addenter_stage")) {
       SendClientMessage(playerid, COLOR_WHITE, "> Использование: /addenter [название]");
 
-      return 1;
+      return 0;
     }
 
     SetPVarInt(playerid, "cmd_addenter_stage", 0);
@@ -25,10 +25,10 @@ CMD:addenter(playerid, params[]) {
       XYZ0(pos), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid)
     );
 
-    EntersAddOne(enter_pos[playerid], gStringSmall, enter_name[playerid]);
+    new enterid = EntersAddOne(enter_name[playerid], enter_pos[playerid], gStringSmall);
     SendClientMessage(playerid, COLOR_SUCCESS, "> Вход/выход в %s успешно создан.", false, enter_name[playerid]);
 
-    return 1;
+    return enterid;
   }
 
   SetPVarInt(playerid, "cmd_addenter_stage", 1);
@@ -42,7 +42,7 @@ CMD:addenter(playerid, params[]) {
   SendClientMessage(playerid, COLOR_SUCCESS, "> Чтобы добавить выход встаньте на желаемую точку и введите команду повторно.", false);
   SendClientMessage(playerid, COLOR_SUCCESS, "> Указывать название больше не требуется - это запустит процесс заново.", false);
 
-  return 1;
+  return 0;
 }
 
 CMD:delenter(playerid, params[]) {
