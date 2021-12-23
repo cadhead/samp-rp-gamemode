@@ -149,7 +149,7 @@ EntersAddOne(const name[], const pos_enter[], const pos_exit[], const desc[] = "
 }
 
 EntersDeleteOne(idx) {
-  new query[68 + 11];
+  new query[36 + 11];
 
   mysql_format(DB_GetConnectionHandle(), query, sizeof query, "DELETE FROM `enters` WHERE `ID` = %d", gEnter[idx][e_enID]);
   mysql_query(DB_GetConnectionHandle(), query);
