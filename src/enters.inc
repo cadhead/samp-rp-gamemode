@@ -87,7 +87,7 @@ static LoadEnters() {
     cache_get_value(i, "Description", gEnter[i][e_enDesc]);
     cache_get_value(i, "EnterPos", pos_enter);
     cache_get_value(i, "ExitPos", pos_exit);
-    DeserializeEnterExitPos(count, pos_enter, pos_exit);
+    DeserializeEnterExitPos(i, pos_enter, pos_exit);
     cache_get_value_int(i, "Type", gEnter[i][e_enType]);
 
     OnEnterStateSet(i);
