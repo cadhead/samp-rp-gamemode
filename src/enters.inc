@@ -124,16 +124,16 @@ static SaveEnters() {
   }
 }
 
-EntersAddOne(const name[], const pos_enter[], const pos_exit[], const desc[] = "", type = ENTER_TYPE_WHNOKNOWS) {
+EntersAddOne(const name[], const pos_enter[], const pos_exit[], type = ENTER_TYPE_WHNOKNOWS) {
   static const 
     queryStr[] = "INSERT INTO `enters`\
-    (`EnterPos`, `ExitPos`, `Type`, `Name`, `Description`)\
-    VALUES ('%e', '%e', %d, '%e', '%e')"
+    (`EnterPos`, `ExitPos`, `Type`, `Name`)\
+    VALUES ('%e', '%e', %d, '%e')"
   ; // 128
 
   new query[128 + 64 + 64 + 32 + 144];
 
-  mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, type, name, desc);
+  mysql_format(DB_GetConnectionHandle(), query, sizeof query, queryStr, pos_enter, pos_exit, type, name);
   mysql_query(DB_GetConnectionHandle(), query);
 
   gEnter[count][e_enID] = cache_insert_id();
@@ -141,11 +141,12 @@ EntersAddOne(const name[], const pos_enter[], const pos_exit[], const desc[] = "
   DeserializeEnterExitPos(count, pos_enter, pos_exit);
 
   strcopy(gEnter[count][e_enName], name);
-  strcopy(gEnter[count][e_enDesc], desc);
 
   OnEnterStateSet(count);
 
   count++;
+
+  return cache_insert_id();
 }
 
 EntersDeleteOne(idx) {
