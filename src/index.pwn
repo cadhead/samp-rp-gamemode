@@ -48,6 +48,7 @@
 #include "./vehicle/index"
 #include "./admin/index"
 #include "./enters"
+#include "./properties/index"
 
 main() {}
 
