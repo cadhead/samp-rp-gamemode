@@ -9,21 +9,16 @@
 #include "./admin/enters.inc"
 
 CMD:askin(playerid, params[]) {
-  new skinid, target;
+  extract params -> new skinid, target;
 
-  sscanf(params, "dd", skinid, target);
-
+  if (!skinid) return SendClientMessage(playerid, COLOR_ERROR, "> Использование: /askin [ID скина] <ID игрока>");
   if (!target) target = playerid;
 
   if (skinid > 311 || skinid < 1 || skinid == 74) {
-    SendClientMessage(playerid, COLOR_ERROR, "> Неверный ID скина!");
-
-    return 1;
+    return SendClientMessage(playerid, COLOR_ERROR, "> Неверный ID скина!");
   }
 
-  SetPlayerSkin(playerid, skinid);
-
-  return 1;
+  return SetPlayerSkin(playerid, skinid);
 }
 
 CMD:setpos(playerid, params[]) {
