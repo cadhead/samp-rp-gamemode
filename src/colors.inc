@@ -1,5 +1,5 @@
 #if defined _colors_included
-	#endinput
+  #endinput
 #endif
 
 #define _colors_included
@@ -49,4 +49,3 @@
 #define cSKYBLUE    "{87CEEB}"
 #define cPURPLE     "{C2A2DA}"
 #define cRED        "{FF6347}"
-

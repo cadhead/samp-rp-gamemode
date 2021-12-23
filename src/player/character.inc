@@ -1,5 +1,5 @@
 #if defined _pl_character_included
-	#endinput
+  #endinput
 #endif
 
 #define _pl_character_included
@@ -15,13 +15,13 @@
 #define DEFAULT_CHARACTER_SKIN      2
 
 enum e_Player_Character {
-	e_cName[MAX_PLAYER_NAME + 1],
-	e_cCash,
-	e_cSkin,
-	Float:e_cSpawnPos[4],
-	e_cSpawnInt,
-	e_cSpawnWorld,
-	e_cDeathStage
+  e_cName[MAX_PLAYER_NAME + 1],
+  e_cCash,
+  e_cSkin,
+  Float:e_cSpawnPos[4],
+  e_cSpawnInt,
+  e_cSpawnWorld,
+  e_cDeathStage
 }
 
 new gCharacter[MAX_PLAYERS][e_Player_Character];
@@ -48,76 +48,76 @@ hook OnPlayerSpawned(playerid) {
 }
 
 stock LoadCharacter(playerid) {
-	new
-		query[60 + MAX_PLAYER_NAME]
-	;
+  new
+    query[60 + MAX_PLAYER_NAME]
+  ;
 
-	GetPlayerName(playerid, gCharacter[playerid][e_cName]);
+  GetPlayerName(playerid, gCharacter[playerid][e_cName]);
 
-	mysql_format(
-		DB_GetConnectionHandle(),
-		query,
-		sizeof query,
-		"SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1",
-		gCharacter[playerid][e_cName]
-	);
+  mysql_format(
+    DB_GetConnectionHandle(),
+    query,
+    sizeof query,
+    "SELECT * FROM `characters` WHERE `Name` = '%e' LIMIT 1",
+    gCharacter[playerid][e_cName]
+  );
 
-	mysql_tquery(DB_GetConnectionHandle(), query, "@__SetCharacterState", "i", playerid);
+  mysql_tquery(DB_GetConnectionHandle(), query, "@__SetCharacterState", "i", playerid);
 }
 
 @__SetCharacterState(playerid);
 @__SetCharacterState(playerid) {
-	if (cache_num_rows() == 0) {
-		KickPlayer(playerid, "Такого персонажа не существует.");
+  if (cache_num_rows() == 0) {
+    KickPlayer(playerid, "Такого персонажа не существует.");
 
-		return 1;
-	}
+    return 1;
+  }
 
-	cache_get_value_int(0, "Cash", gCharacter[playerid][e_cCash]);
-	cache_get_value_int(0, "Skin", gCharacter[playerid][e_cSkin]);
-	cache_get_value(0, "SpawnPos", gStringSmall);
-	sscanf(gStringSmall, "p<|>ffffii", 
-		gCharacter[playerid][e_cSpawnPos][X],
-		gCharacter[playerid][e_cSpawnPos][Y],
-		gCharacter[playerid][e_cSpawnPos][Z],
-		gCharacter[playerid][e_cSpawnPos][ANGLE],
-		gCharacter[playerid][e_cSpawnWorld],
-		gCharacter[playerid][e_cSpawnInt]
-	);
+  cache_get_value_int(0, "Cash", gCharacter[playerid][e_cCash]);
+  cache_get_value_int(0, "Skin", gCharacter[playerid][e_cSkin]);
+  cache_get_value(0, "SpawnPos", gStringSmall);
+  sscanf(gStringSmall, "p<|>ffffii", 
+    gCharacter[playerid][e_cSpawnPos][X],
+    gCharacter[playerid][e_cSpawnPos][Y],
+    gCharacter[playerid][e_cSpawnPos][Z],
+    gCharacter[playerid][e_cSpawnPos][ANGLE],
+    gCharacter[playerid][e_cSpawnWorld],
+    gCharacter[playerid][e_cSpawnInt]
+  );
 
-	SetSpawnPointDefault(playerid);
-	
-	SetSpawnInfo(
-		playerid,
-		0,
-		gCharacter[playerid][e_cSkin],
-		XYZ0(gCharacter[playerid][e_cSpawnPos]),
-		gCharacter[playerid][e_cSpawnPos][ANGLE],
-		0, 0, 0, 0, 0, 0
-	);
+  SetSpawnPointDefault(playerid);
+  
+  SetSpawnInfo(
+    playerid,
+    0,
+    gCharacter[playerid][e_cSkin],
+    XYZ0(gCharacter[playerid][e_cSpawnPos]),
+    gCharacter[playerid][e_cSpawnPos][ANGLE],
+    0, 0, 0, 0, 0, 0
+  );
 
-	FormatCharacterName(playerid);
+  FormatCharacterName(playerid);
 
-	SpawnPlayer(playerid);
+  SpawnPlayer(playerid);
 
-	return 1;
+  return 1;
 }
 
 @__ResetCharacterState(playerid);
 @__ResetCharacterState(playerid) {
-	memset(gCharacter[playerid], 0);
+  memset(gCharacter[playerid], 0);
 }
 
 static SetSpawnPointDefault(playerid) {
-	for (new i; i < 3; i++) { // Check is character has no spawn point
-		if (gCharacter[playerid][e_cSpawnPos][i] == 0) break;
-		else return;
-	}
+  for (new i; i < 3; i++) { // Check is character has no spawn point
+    if (gCharacter[playerid][e_cSpawnPos][i] == 0) break;
+    else return;
+  }
 
-	gCharacter[playerid][e_cSpawnPos][X] 		 = DEFAULT_CHARACTER_POS_X;
-	gCharacter[playerid][e_cSpawnPos][Y]     = DEFAULT_CHARACTER_POS_Y;
-	gCharacter[playerid][e_cSpawnPos][Z]     = DEFAULT_CHARACTER_POS_Z;
-	gCharacter[playerid][e_cSpawnPos][ANGLE] = DEFAULT_CHARACTER_POS_A;
+  gCharacter[playerid][e_cSpawnPos][X] 		 = DEFAULT_CHARACTER_POS_X;
+  gCharacter[playerid][e_cSpawnPos][Y]     = DEFAULT_CHARACTER_POS_Y;
+  gCharacter[playerid][e_cSpawnPos][Z]     = DEFAULT_CHARACTER_POS_Z;
+  gCharacter[playerid][e_cSpawnPos][ANGLE] = DEFAULT_CHARACTER_POS_A;
 }
 
 static FormatCharacterName(playerid) {
