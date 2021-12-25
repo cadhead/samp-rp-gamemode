@@ -165,14 +165,14 @@ EntersDeleteOne(idx) {
 DeserializeEnterExitPos(idx, const pos_enter[], const pos_exit[] ) {
   sscanf(pos_enter, "p<|>fffii", 
     XYZ0(gEnter[idx][e_enPosEnter]),
-    gEnter[idx][e_enPosEnterWorld],
-    gEnter[idx][e_enPosEnterInt]
+    gEnter[idx][e_enPosEnterInt],
+    gEnter[idx][e_enPosEnterWorld]
   );
 
   sscanf(pos_exit, "p<|>fffii", 
     XYZ0(gEnter[idx][e_enPosExit]),
-    gEnter[idx][e_enPosExitWorld],
-    gEnter[idx][e_enPosExitInt]
+    gEnter[idx][e_enPosExitInt],
+    gEnter[idx][e_enPosExitWorld]
   );
 }
 
