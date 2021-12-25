@@ -88,3 +88,12 @@ stock SetPlayerPosEx(playerid, Float:x, Float:y, Float:z, virtualworld = -1, int
 
   return SetPlayerPos(playerid, x, y, z);
 }
+
+stock SerializeCharacterPosition(playerid, dest[], size = sizeof dest) {
+  new Float:pos[3];
+
+  GetPlayerPos(playerid, XYZ0(pos));
+  format(dest, size, "%.3f|%.3f|%.3f|%d|%d",
+    XYZ0(pos), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid)
+  );
+}
