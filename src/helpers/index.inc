@@ -94,6 +94,6 @@ stock SerializeCharacterPosition(playerid, dest[], size = sizeof dest) {
 
   GetPlayerPos(playerid, XYZ0(pos));
   format(dest, size, "%.3f|%.3f|%.3f|%d|%d",
-    XYZ0(pos), GetPlayerVirtualWorld(playerid), GetPlayerInterior(playerid)
+    XYZ0(pos), GetPlayerInterior(playerid), GetPlayerVirtualWorld(playerid)
   );
 }
