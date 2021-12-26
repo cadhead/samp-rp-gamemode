@@ -65,6 +65,8 @@ public OnExitDone(playerid, enteridx) { return 1; }
 static OnEnterStateSet(idx) {
   if (gEnter[idx][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(idx);
 
+  printf("%d", gEnter[idx][e_enType]);
+
   want_save[idx] = true;
 }
 
@@ -137,6 +139,7 @@ EntersAddOne(const name[], const pos_enter[], const pos_exit[], type = ENTER_TYP
   mysql_query(DB_GetConnectionHandle(), query);
 
   gEnter[count][e_enID] = cache_insert_id();
+  gEnter[count][e_enType] = type;
 
   DeserializeEnterExitPos(count, pos_enter, pos_exit);
 
