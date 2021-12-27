@@ -65,8 +65,6 @@ public OnExitDone(playerid, enteridx) { return 1; }
 static OnEnterStateSet(idx) {
   if (gEnter[idx][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(idx);
 
-  printf("%d", gEnter[idx][e_enType]);
-
   want_save[idx] = true;
 }
 
@@ -162,7 +160,7 @@ EntersDeleteOne(idx) {
     DestroyDynamic3DTextLabel(gEnter[idx][e_enText3D]);
   }
 
-  memset(gEnter[idx]);
+  MemSet(gEnter[idx]);
 }
 
 DeserializeEnterExitPos(idx, const pos_enter[], const pos_exit[] ) {

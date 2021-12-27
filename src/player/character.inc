@@ -105,7 +105,7 @@ stock LoadCharacter(playerid) {
 
 @__ResetCharacterState(playerid);
 @__ResetCharacterState(playerid) {
-  memset(gCharacter[playerid], 0);
+  MemSet(gCharacter[playerid], 0);
 }
 
 static SetSpawnPointDefault(playerid) {
