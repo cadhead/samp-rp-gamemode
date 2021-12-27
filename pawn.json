@@ -16,7 +16,8 @@
 		"urShadow/Pawn.CMD",
 		"oscar-broman/samp-weapon-config",
 		"pawn-lang/YSI-Includes",
-		"pawn-lang/sa-mp-fixes"
+		"pawn-lang/sa-mp-fixes",
+		"rsetiawan7/New-SA-MP-callbacks"
 	],
 	"local": true,
 	"runtime": {
