@@ -2,6 +2,7 @@
 #pragma warning disable 203
 
 #include <a_samp>
+#define FIXES_ExplicitOptions 0
 #define FIXES_Single 1
 #define FIXES_DefaultDisabled 1
 #define FIX_GetPlayerWeather 1 
@@ -46,9 +47,9 @@
 #include "./player/index"
 #include "./chat/index"
 #include "./vehicle/index"
-#include "./admin/index"
 #include "./enters"
 #include "./properties/index"
+#include "./admin/index"
 
 main() {}
 
