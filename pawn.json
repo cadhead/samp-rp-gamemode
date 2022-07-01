@@ -13,7 +13,7 @@
 		"cadhead/zmessage",
 		"Southclaws/formatex",
 		"karimcambridge/samp-foreach",
-		"urShadow/Pawn.CMD",
+		"katursis/Pawn.CMD:3.3.4",
 		"oscar-broman/samp-weapon-config",
 		"pawn-lang/YSI-Includes",
 		"pawn-lang/sa-mp-fixes",
@@ -27,8 +27,8 @@
 			"samp-rp-gamemode"
 		],
 		"plugins": [
-			"sscanf",
 			"pawncmd",
+			"sscanf",
 			"mysql",
 			"streamer"
 		],

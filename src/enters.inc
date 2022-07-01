@@ -9,6 +9,7 @@
 #define MAX_ENTERS 1024
 
 #define ENTER_TYPE_WHNOKNOWS 0
+#define ENTER_TYPE_HOME      2
 #define ENTER_TYPE_PROPERTY  1
 
 enum e_Enters {
@@ -22,7 +23,7 @@ enum e_Enters {
   Float:e_enPosExit[3],
   e_enPosExitWorld,
   e_enPosExitInt,
-  STREAMER_TAG_3D_TEXT_LABEL:e_enText3D
+  STREAMER_TAG_PICKUP:e_enPickUp
 }
 
 new gEnter[MAX_ENTERS][e_Enters];
@@ -63,7 +64,7 @@ public OnExitStart(playerid, enteridx) { return 1; }
 public OnEnterDone(playerid, enteridx) { return 1; }
 public OnExitDone(playerid, enteridx) { return 1; }
 static OnEnterStateSet(idx) {
-  if (gEnter[idx][e_enType] == ENTER_TYPE_WHNOKNOWS) CreateEnter3DText(idx);
+  CreateEnterPickUp(idx);
 
   want_save[idx] = true;
 }
@@ -156,8 +157,8 @@ EntersDeleteOne(idx) {
   mysql_format(DB_GetConnectionHandle(), query, sizeof query, "DELETE FROM `enters` WHERE `ID` = %d", gEnter[idx][e_enID]);
   mysql_query(DB_GetConnectionHandle(), query);
   
-  if (IsValidDynamic3DTextLabel(gEnter[idx][e_enText3D])) {
-    DestroyDynamic3DTextLabel(gEnter[idx][e_enText3D]);
+  if (IsValidDynamicPickup(gEnter[idx][e_enPickUp])) {
+    DestroyDynamicPickup(gEnter[idx][e_enPickUp]);
   }
 
   MemSet(gEnter[idx]);
@@ -226,19 +227,21 @@ CMD:exit(playerid) {
   return 1;
 }
 
-static CreateEnter3DText(idx) {
-  if (gEnter[idx][e_enText3D]) {
-    DestroyDynamic3DTextLabel(gEnter[idx][e_enText3D]);
+static CreateEnterPickUp(idx) {
+  if (gEnter[idx][e_enPickUp]) {
+    DestroyDynamicPickup(gEnter[idx][e_enPickUp]);
   }
 
-  format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[idx][e_enName]);
-  gEnter[idx][e_enText3D] = CreateDynamic3DTextLabel(
-    gString,
-    COLOR_BLUE,
-    XYZ0(gEnter[idx][e_enPosEnter]), 4.0, 
-    INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 
-    gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]
-  );
+  CreateDynamicPickup(1239, 14, XYZ0(gEnter[idx][e_enPosEnter]), gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]);
+
+  // format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[idx][e_enName]);
+  // gEnter[idx][e_enText3D] = CreateDynamic3DTextLabel(
+  //   gString,
+  //   COLOR_BLUE,
+  //   XYZ0(gEnter[idx][e_enPosEnter]), 4.0, 
+  //   INVALID_PLAYER_ID, INVALID_VEHICLE_ID, 1, 
+  //   gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]
+  // );
 }
 
 @__UnFreezePlayer(playerid);

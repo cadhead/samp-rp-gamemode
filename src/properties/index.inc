@@ -1,6 +1,10 @@
-#if defined _houses_included
+#if defined _properites_included
   #endinput
 #endif
+
+#define _properites_included
+
+#include "./properties/interiors"
 
 #include <YSI_Coding\y_hooks>
 
@@ -83,26 +87,26 @@ static SaveProperties() {
   }
 }
 
-PropertiesAddOne(enterid, price) {
+PropertiesAddOne(enterid) {
   static const queryStr[] = "INSERT INTO `properties`\
     (`EnterID`, `Price`)\
-    VALUES ('%d', '%d')"
+    VALUES ('%d')"
   ; // 122
 
   new query[122 + (5 * 10)];
 
   gProperty[count][e_prEnterID] = enterid;
-  gProperty[count][e_prPrice] = price;
 
   mysql_format(DB_GetConnectionHandle(),
     query, sizeof query, queryStr,
-    gProperty[count][e_prEnterID],
-    gProperty[count][e_prPrice]
+    gProperty[count][e_prEnterID]
   );
 
   mysql_query(DB_GetConnectionHandle(), query);
 
   count++;
+
+  return cache_insert_id();
 }
 
 PropertiesDeleteOne(idx) {
@@ -111,7 +115,7 @@ PropertiesDeleteOne(idx) {
   mysql_format(DB_GetConnectionHandle(), query, sizeof query, "DELETE FROM `properties` WHERE `ID` = %d", gProperty[idx][e_prID]);
   mysql_query(DB_GetConnectionHandle(), query);
 
-  memset(gProperty[idx]);
+  MemSet(gProperty[idx]);
 }
 
 @__SetPropertiesState(loadStatrtTime);

@@ -7,6 +7,7 @@
 #include "./admin/vehicle.inc"
 #include "./admin/weapon.inc"
 #include "./admin/enters.inc"
+#include "./admin/business.inc"
 
 CMD:askin(playerid, params[]) {
   extract params -> new skinid, target;

@@ -26,10 +26,10 @@
 #include <a_mysql>
 #include <sscanf2>
 #include <streamer>
-#include <Pawn.CMD>
 #include <foreach>
 #include <formatex>
 #include <mdialog>
+#include <pawn.CMD>
 #define ZMSG_MAX_CHAT_LENGTH 84
 #define ZMSG_MAX_PLAYER_CHAT_LENGTH 84
 #define ZMSG_SEPARATORS_LIST ' '
