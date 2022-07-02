@@ -82,7 +82,7 @@ public OnGameModeInit() {
 }
 
 public OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid) { 
-  print("???");
+  return 1;
 }
 
 public OnGameModeUpdate() {

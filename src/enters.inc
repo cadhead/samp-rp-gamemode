@@ -10,7 +10,7 @@
 
 #define ENTER_TYPE_WHNOKNOWS 0
 #define ENTER_TYPE_HOME      2
-#define ENTER_TYPE_PROPERTY  1
+#define ENTER_TYPE_BUSSINESS  1
 
 enum e_Enters {
   e_enID,
@@ -57,6 +57,12 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
   }
 
   return 1;
+}
+
+hook OnPlayerPickUpDynPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
+  new idx = IsPlayerNearAnyEnter(playerid);
+
+  if (idx == -1) return;
 }
 
 public OnEnterStart(playerid, enteridx) { return 1; }
@@ -227,12 +233,12 @@ CMD:exit(playerid) {
   return 1;
 }
 
-static CreateEnterPickUp(idx) {
+CreateEnterPickUp(idx, pickupid = 18631) {
   if (gEnter[idx][e_enPickUp]) {
     DestroyDynamicPickup(gEnter[idx][e_enPickUp]);
   }
 
-  CreateDynamicPickup(1239, 14, XYZ0(gEnter[idx][e_enPosEnter]), gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]);
+  CreateDynamicPickup(1239, pickupid, XYZ0(gEnter[idx][e_enPosEnter]), gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]);
 
   // format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[idx][e_enName]);
   // gEnter[idx][e_enText3D] = CreateDynamic3DTextLabel(
@@ -264,6 +270,10 @@ stock GetEnterIndex(enterid) {
   return -1;
 }
 
+stock GetEnterType(idx) {
+  return gEnter[idx][e_enType];
+}
+
 stock SetEnterName(enterid, const newname[]) {
   new idx = GetEnterIndex(enterid);
 
@@ -272,4 +282,24 @@ stock SetEnterName(enterid, const newname[]) {
   strcopy(gEnter[idx][e_enName], newname);
 
   OnEnerStateSet(idx);
+}
+
+stock IsPlayerNearAnyEnter(playerid) {
+  for(new idx = 0; idx < count; idx++) {
+    if(!gEnter[idx][e_enID])
+      continue; 
+
+    if(IsPlayerInRangeOfPoint(playerid, 3.0, XYZ0(gEnter[idx][e_enPosEnter])) && GetPlayerVirtualWorld(playerid) == gEnter[idx][e_enPosEnterWorld])
+      return idx;
+  }
+ 
+  return -1;
+}
+
+CheckEntersEnterExist(int) {
+  for (new i; i < count; i++) {
+    if ((gEnter[i][e_enPosExitInt] == int)) return gEnter[i][e_enPosExitWorld] + 1;
+  }
+
+  return 0;
 }

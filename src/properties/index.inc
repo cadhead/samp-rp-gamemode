@@ -88,10 +88,7 @@ static SaveProperties() {
 }
 
 PropertiesAddOne(enterid) {
-  static const queryStr[] = "INSERT INTO `properties`\
-    (`EnterID`, `Price`)\
-    VALUES ('%d')"
-  ; // 122
+  static const queryStr[] = "INSERT INTO `properties` (`EnterID`) VALUES ('%d')";
 
   new query[122 + (5 * 10)];
 
@@ -118,6 +115,19 @@ PropertiesDeleteOne(idx) {
   MemSet(gProperty[idx]);
 }
 
+PropertySetPickUp(idx, enterid) {
+  new
+    e_index = GetEnterIndex(enterid),
+    e_owner = gProperty[idx][e_prOwnerID],
+    house_pickup = e_owner ? 1273 : 1272,
+    bussiness_pickup = 1239;
+
+  if (GetEnterType(e_index) == ENTER_TYPE_HOME)
+    CreateEnterPickUp(e_index, house_pickup);
+  if (GetEnterType(e_index) == ENTER_TYPE_BUSSINESS)
+    CreateEnterPickUp(e_index, bussiness_pickup);
+}
+
 @__SetPropertiesState(loadStatrtTime);
 @__SetPropertiesState(loadStatrtTime) {
   cache_get_row_count(count);
@@ -132,6 +142,8 @@ PropertiesDeleteOne(idx) {
     cache_get_value(i, "InventoryItems", gProperty[i][e_prInvItems]);
     cache_get_value(i, "InventoryItemsCount", gProperty[i][e_prInvItemsCount]);
     cache_get_value_int(i, "Locked", gProperty[i][e_prLocked]);
+
+    PropertySetPickUp(i, gProperty[i][e_prEnterID]);
   }
 
   gPropertiesIsLoaded = true;

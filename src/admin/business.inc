@@ -32,15 +32,17 @@ DialogCreate:businessadd(playerid) {
 }
 
 DialogResponse:businessadd(playerid, response, listitem, inputtext[]) {
-  if (!response) return 0;
+  if (!response || gBusinessInteriors[listitem][0][0] == -1) return 0;
 
   new 
     enterid,
-    propid
+    propid,
+    virtworld = CheckEntersEnterExist(gBusinessInteriors[listitem][0][0])
   ;
 
+  format(gString, sizeof gString, "%s|%d", gBusinessInteriors[listitem][2], virtworld);
   SerializeCharacterPosition(playerid, gStringSmall);
-  enterid = EntersAddOne(property_name[playerid], gStringSmall, gBusinessInteriors[listitem][2], ENTER_TYPE_PROPERTY);
+  enterid = EntersAddOne(property_name[playerid], gStringSmall, gString, ENTER_TYPE_BUSSINESS);
   propid = PropertiesAddOne(enterid);
 
   SendClientMessage(playerid, COLOR_SUCCESS, "> Бизнес %s был успешно создан.", false, property_name[playerid]);
