@@ -37,6 +37,7 @@
 #define ZMSG_HYPHEN_START "... "
 #include <zmessage>
 #include <weapon-config>
+#include <realtime-clock>
 
 #include "./colors"
 #include "./constants"
@@ -72,9 +73,16 @@ public OnGameModeInit() {
   SetTimer("OnGameModeUpdate", 500, true);
   SetTimer("OnWorldSave", save_world_timing, true);
 
+  RealTime_SetInterval(10000, false);
+  RealTime_Sync();
+
   AddPlayerClass(0, 1958.3783, 1343.1572, 15.3746, 269.1425, 0, 0, 0, 0, 0, 0);
 
   return 1;
+}
+
+public OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid) { 
+  print("???");
 }
 
 public OnGameModeUpdate() {
@@ -84,6 +92,7 @@ public OnGameModeUpdate() {
 
 public OnGameModeExit() {
   DB_ConnectionClose();
+  RealTime_StopTime();
 
   return 1;
 }
@@ -92,7 +101,21 @@ public OnWorldSave() {
   return 1;
 }
 
+public OnWorldTimeUpdate(hour, minute) {
+  // new
+  //   str[16]
+  // ;
+
+  // format(str, sizeof(str), "worldtime %02d:%02d", hour, minute);
+  // SendRconCommand(str);
+
+  SetWorldTime(hour);
+
+  return 1;
+}
+
 public OnPlayerConnect(playerid) {
+  SetPlayerTime(playerid, RealTime_GetHour(), RealTime_GetMinute());
 
   return 1;
 }

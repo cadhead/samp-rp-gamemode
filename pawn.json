@@ -17,7 +17,8 @@
 		"oscar-broman/samp-weapon-config",
 		"pawn-lang/YSI-Includes",
 		"pawn-lang/sa-mp-fixes",
-		"rsetiawan7/New-SA-MP-callbacks"
+		"rsetiawan7/New-SA-MP-callbacks",
+		"rsetiawan7/samp-realtime-clock"
 	],
 	"local": true,
 	"runtime": {
