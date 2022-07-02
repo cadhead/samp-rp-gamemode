@@ -37,7 +37,7 @@ DialogResponse:businessadd(playerid, response, listitem, inputtext[]) {
   new 
     enterid,
     propid,
-    virtworld = CheckEntersEnterExist(gBusinessInteriors[listitem][0][0])
+    virtworld = CheckEntersEnterExist(gBusinessInteriors[listitem][0][0], ENTER_TYPE_BUSSINESS)
   ;
 
   format(gString, sizeof gString, "%s|%d", gBusinessInteriors[listitem][2], virtworld);

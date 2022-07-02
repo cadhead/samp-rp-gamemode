@@ -296,9 +296,9 @@ stock IsPlayerNearAnyEnter(playerid) {
   return -1;
 }
 
-CheckEntersEnterExist(int) {
+CheckEntersEnterExist(int, type = ENTER_TYPE_WHNOKNOWS) {
   for (new i; i < count; i++) {
-    if ((gEnter[i][e_enPosExitInt] == int)) return gEnter[i][e_enPosExitWorld] + 1;
+    if ((gEnter[i][e_enPosExitInt] == int) && (gEnter[i][e_enType] == type)) return gEnter[i][e_enPosExitWorld] + 1;
   }
 
   return 0;
