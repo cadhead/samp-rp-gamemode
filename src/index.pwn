@@ -102,13 +102,6 @@ public OnWorldSave() {
 }
 
 public OnWorldTimeUpdate(hour, minute) {
-  // new
-  //   str[16]
-  // ;
-
-  // format(str, sizeof(str), "worldtime %02d:%02d", hour, minute);
-  // SendRconCommand(str);
-
   SetWorldTime(hour);
 
   return 1;
