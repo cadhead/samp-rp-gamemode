@@ -8,8 +8,8 @@
 
 #define MAX_ENTERS 1024
 
-#define ENTER_TYPE_WHNOKNOWS 0
-#define ENTER_TYPE_HOME      2
+#define ENTER_TYPE_WHNOKNOWS  0
+#define ENTER_TYPE_HOUSE      2
 #define ENTER_TYPE_BUSSINESS  1
 
 enum e_Enters {

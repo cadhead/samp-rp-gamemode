@@ -122,7 +122,7 @@ PropertySetPickUp(idx, enterid) {
     house_pickup = e_owner ? 1273 : 1272,
     bussiness_pickup = 1239;
 
-  if (GetEnterType(e_index) == ENTER_TYPE_HOME)
+  if (GetEnterType(e_index) == ENTER_TYPE_HOUSE)
     CreateEnterPickUp(e_index, house_pickup);
   if (GetEnterType(e_index) == ENTER_TYPE_BUSSINESS)
     CreateEnterPickUp(e_index, bussiness_pickup);
