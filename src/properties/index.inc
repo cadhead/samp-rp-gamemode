@@ -101,6 +101,8 @@ PropertiesAddOne(enterid) {
 
   mysql_query(DB_GetConnectionHandle(), query);
 
+  PropertySetPickUp(count, enterid);
+
   count++;
 
   return cache_insert_id();
@@ -119,7 +121,7 @@ PropertySetPickUp(idx, enterid) {
   new
     e_index = GetEnterIndex(enterid),
     e_owner = gProperty[idx][e_prOwnerID],
-    house_pickup = e_owner ? 1273 : 1272,
+    house_pickup = e_owner ? 1272 : 1273,
     bussiness_pickup = 1239;
 
   if (GetEnterType(e_index) == ENTER_TYPE_HOUSE)

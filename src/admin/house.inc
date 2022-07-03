@@ -4,8 +4,6 @@
 
 #define _adm_house_included
 
-static count = 0;
-
 CMD:houseadd(playerid, params[]) {
   return Dialog_Show(playerid, Dialog:houseadd);
 }
@@ -34,7 +32,7 @@ DialogResponse:houseadd(playerid, response, listitem, inputtext[]) {
     property_name[32]
   ;
 
-  format(property_name, sizeof property_name, "House #%d", GetEntersCount() + count + 1);
+  format(property_name, sizeof property_name, "House #%d", GetEntersCount() + 1);
 
   format(gString, sizeof gString, "%s|%d", gHousesInteriors[listitem][2], virtworld);
   SerializeCharacterPosition(playerid, gStringSmall);

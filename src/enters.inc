@@ -63,6 +63,8 @@ hook OnPlayerPickUpDynPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
   new idx = IsPlayerNearAnyEnter(playerid);
 
   if (idx == -1) return;
+
+  // ShowPopupMessage(playerid, MESSAGE_TYPE_INFO, "Hello world!\ntest\ntest");
 }
 
 public OnEnterStart(playerid, enteridx) { return 1; }
@@ -238,7 +240,7 @@ CreateEnterPickUp(idx, pickupid = 18631) {
     DestroyDynamicPickup(gEnter[idx][e_enPickUp]);
   }
 
-  CreateDynamicPickup(1239, pickupid, XYZ0(gEnter[idx][e_enPosEnter]), gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]);
+  gEnter[idx][e_enPickUp] = CreateDynamicPickup(pickupid, 2, XYZ0(gEnter[idx][e_enPosEnter]), gEnter[idx][e_enPosEnterWorld], gEnter[idx][e_enPosEnterInt]);
 
   // format( gString, sizeof gString,cWHITE"%s\n"cBLUE"[Press Y]", gEnter[idx][e_enName]);
   // gEnter[idx][e_enText3D] = CreateDynamic3DTextLabel(
