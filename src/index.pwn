@@ -22,6 +22,9 @@
 #define FIX_SetSpawnInfo 1
 #define FIX_const 1
 #include <fixes>
+#define YSI_NO_HEAP_MALLOC
+#define YSI_NO_MODE_CACHE
+#define YSI_NO_OPTIMISATION_MESSAGE
 #include <YSI_Coding\y_hooks>
 #include <a_mysql>
 #include <sscanf2>
