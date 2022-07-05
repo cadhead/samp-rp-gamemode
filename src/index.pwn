@@ -84,10 +84,6 @@ public OnGameModeInit() {
   return 1;
 }
 
-public OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid) { 
-  return 1;
-}
-
 public OnGameModeUpdate() {
 
   return 1;
@@ -182,6 +178,14 @@ public OnVehicleSpawn(vehicleid) {
 
 public OnRconCommand(cmd[]) {
 	return 0;
+}
+
+public OnPlayerPickUpDynamicPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
+  new enteridx = IsPlayerNearAnyEnter(playerid);
+  new propidx = GetPropertyByEnterid(gEnter[enteridx][e_enID]);
+
+  if (enteridx == -1) return;
+  OnEnterPickupPickUp(playerid, pickupid, enteridx, propidx);
 }
 
 

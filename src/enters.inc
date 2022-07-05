@@ -59,14 +59,6 @@ hook OnPlayerKeyStateChange(playerid, newkeys, oldkeys) {
   return 1;
 }
 
-hook OnPlayerPickUpDynPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
-  new idx = IsPlayerNearAnyEnter(playerid);
-
-  if (idx == -1) return;
-
-  // ShowPopupMessage(playerid, MESSAGE_TYPE_INFO, "Hello world!\ntest\ntest");
-}
-
 public OnEnterStart(playerid, enteridx) { return 1; }
 public OnExitStart(playerid, enteridx) { return 1; }
 public OnEnterDone(playerid, enteridx) { return 1; }
@@ -75,6 +67,9 @@ static OnEnterStateSet(idx) {
   CreateEnterPickUp(idx);
 
   want_save[idx] = true;
+}
+public OnEnterPickupPickUp(playerid, STREAMER_TAG_PICKUP:pickupid, enteridx, propidx) {
+  return 1;
 }
 
 static LoadEnters() {
@@ -305,3 +300,19 @@ CheckEntersEnterExist(int, type = ENTER_TYPE_WHNOKNOWS) {
 
   return 0;
 }
+
+// hook OnPlayerPickUpDynPickup(playerid, STREAMER_TAG_PICKUP:pickupid) {
+//   new enterid = IsPlayerNearAnyEnter(playerid);
+//   new propid = GetEnterProperty(gEnter[enteridx][e_enID]);
+
+//   if (enteridx == -1) return;
+//   OnEnterPickupPickUp(playerid, pickupid, enterid, propid);
+
+//   // // if ()
+//   // new message[4][64];
+
+//   // message[0] = gEnter[enteridx][e_enName];
+//   // // message[1] = gEnter[enteridx][e_en];
+
+//   // ShowPopupMessage(playerid, message);
+// }

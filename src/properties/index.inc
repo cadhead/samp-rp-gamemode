@@ -53,6 +53,19 @@ hook function OnEnterStart(playerid, enteridx) {
   return continue(playerid, enteridx);
 }
 
+hook function OnEnterPickupPickUp(playerid, STREAMER_TAG_PICKUP:pickupid, enteridx, propidx) {
+  if (propidx == -1) return;
+  new message[4][128];
+
+  if (gEnter[enteridx][e_enType] == ENTER_TYPE_HOUSE) {
+    format(message[0], 128, "%s", gEnter[enteridx][e_enName]);
+    format(message[1], 128, "Price: $%d", gProperty[propidx][e_prPrice]);
+    strcat(message[2], gProperty[propidx][e_prLocked] ? "~r~Locked" : "~g~Unlocked");
+  }
+
+  ShowPopupMessage(playerid, message);
+}
+
 static LoadProperties() {
   mysql_tquery(DB_GetConnectionHandle(), "SELECT * FROM `properties`", "@__SetPropertiesState", "d", GetTickCount());
 }
@@ -152,4 +165,15 @@ PropertySetPickUp(idx, enterid) {
   printf("Number of properties: %d, took %d ms ", count, GetTickCount() - loadStatrtTime);
 
   return 1;
+}
+
+GetPropertyByEnterid(enterid) {
+  for(new idx = 0; idx < count; idx++) {
+    if(gProperty[idx][e_prEnterID] != enterid)
+      continue; 
+
+    return idx;
+  }
+ 
+  return -1;
 }
