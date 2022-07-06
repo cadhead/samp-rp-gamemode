@@ -134,7 +134,6 @@ stock SetCharacterDeathStage(playerid, stage) {
     }
     case CHARACTER_HEALTHY: {
       gCharacter[playerid][e_cDeathStage] = CHARACTER_HEALTHY;
-      TogglePlayerControllable(playerid, true);
     }
   }
 
@@ -316,6 +315,7 @@ CMD:respawnme(playerid) {
   SetPlayerInterior(playerid, 0);
   SetPlayerVirtualWorld(playerid, 0);
   SetPlayerHealth(playerid, 100.0);
+  TogglePlayerControllable(playerid, true);
 
   return 1;
 }

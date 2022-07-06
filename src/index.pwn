@@ -70,6 +70,7 @@ public OnGameModeInit() {
   EnableVehicleFriendlyFire();
   SetVehiclePassengerDamage(true);
   SetDisableSyncBugs(true);
+  SetDamageFeed(false);
 
   new save_world_timing = DURATION(1 hour);
 
