@@ -49,33 +49,7 @@ static const max_death_cd = 3;
 #define BODY_PART_RIGHT_LEG  8
 #define BODY_PART_HEAD       9
 
-CMD:test(playerid, params[]) {
-  sscanf(params, "f", gHealth);
-  SetPlayerHealth(playerid, gHealth);
-
-  return 1;
-}
-
-hook OnPlayerDeath(playerid, bool:cancelable) {
-  GetPlayerPos(playerid, XYZ0(gCharacter[playerid][e_cSpawnPos]));
-  SetSpawnInfo( 
-    playerid, 
-    0,
-    gCharacter[playerid][e_cSkin], 
-    XYZ0(gCharacter[playerid][e_cSpawnPos]),
-    90.0, 
-    0, 0, 0, 0, 0, 0 
-  );
-
-  SetPlayerVirtualWorld(playerid, gCharacter[playerid][e_cSpawnWorld]);
-  SetPlayerInterior(playerid, gCharacter[playerid][e_cSpawnInt]);
-
-  SetCharacterDeathStage(playerid, GetCharacterDeathStage(playerid));
-
-  return 1;
-}
-
-hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
+hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weaponid, bodypart) {
   if (playerid == INVALID_PLAYER_ID) return 1;
 
   new character_death_state = GetCharacterDeathStage(playerid);
@@ -87,6 +61,12 @@ hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
 
   GetPlayerHealth(playerid, gHealth);
   if (gHealth <= STAGE_HEALTH_AMOUNT) {
+    if (issuerid == INVALID_PLAYER_ID) {
+      SetTimerEx("@__ds_SpawnPlayer", 100, false, "%d", playerid);
+
+      return 1;
+    }
+
     SetPlayerHealth(playerid, STAGE_HEALTH_AMOUNT);
     GetPlayerPos(playerid, XYZ0(death_pos[playerid]));
 
@@ -97,10 +77,24 @@ hook OnPlayerDamageDone(playerid, Float:amount, issuerid, weapon, bodypart) {
 
   if (!character_state_dead) {
     SetCharacterDeathStage(playerid, character_death_state);
-    SetCharacterDamageTaken(playerid, issuerid, bodypart, weapon, amount);
+    SetCharacterDamageTaken(playerid, issuerid, bodypart, weaponid, amount);
   }
 
   return 1;
+}
+
+@__ds_SpawnPlayer(playerid);
+@__ds_SpawnPlayer(playerid) {
+  SetPlayerPosEx(
+    playerid, 
+    DEFAULT_CHARACTER_POS_X, 
+    DEFAULT_CHARACTER_POS_Y, 
+    DEFAULT_CHARACTER_POS_Z, 
+    DEFAULT_CHARACTER_POS_WORLD, 
+    DEFAULT_CHARACTER_POS_INT
+  );
+
+  SetPlayerHealth(playerid, 100.0);
 }
 
 hook OnPlayerUpdate(playerid) {
