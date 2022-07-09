@@ -132,3 +132,18 @@ static FormatCharacterName(playerid) {
   strcopy(gCharacterFormatedName[playerid], name);
 }
 
+stock GetCharacterNameByID(dbid) {
+	new query[120], returnString[60];
+	
+	mysql_format(DB_GetConnectionHandle(), query, sizeof(query), "SELECT Name FROM characters WHERE ID = %i", dbid);
+	new Cache:cache = mysql_query(DB_GetConnectionHandle(), query);
+	
+	if(!cache_num_rows())
+		returnString = "None";
+		
+	else
+		cache_get_value(0, "Name", returnString);
+	
+	cache_delete(cache);
+	return returnString;
+}

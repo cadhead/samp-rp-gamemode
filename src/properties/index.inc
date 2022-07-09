@@ -14,6 +14,7 @@ enum e_Property {
   e_prID,
   e_prEnterID,
   e_prOwnerID,
+  e_prOwnerName[MAX_PLAYER_NAME],
   e_prFactionID,
   e_prPrice,
   e_prCash,
@@ -59,7 +60,10 @@ hook function OnEnterPickupPickUp(playerid, STREAMER_TAG_PICKUP:pickupid, enteri
 
   if (gEnter[enteridx][e_enType] == ENTER_TYPE_HOUSE) {
     format(message[0], 128, "%s", gEnter[enteridx][e_enName]);
-    format(message[1], 128, "Price: $%d", gProperty[propidx][e_prPrice]);
+    if (gProperty[propidx][e_prOwnerID])
+      format(message[1], 128, "Owner: %s", gProperty[propidx][e_prOwnerName]);
+    else
+      format(message[1], 128, "Price: $%d", gProperty[propidx][e_prPrice]);
     strcat(message[2], gProperty[propidx][e_prLocked] ? "~r~Locked" : "~g~Unlocked");
   }
 
@@ -159,6 +163,10 @@ PropertySetPickUp(idx, enterid) {
     cache_get_value_int(i, "Locked", gProperty[i][e_prLocked]);
 
     PropertySetPickUp(i, gProperty[i][e_prEnterID]);
+  }
+
+  for (new i = 0; i < count; i++) {
+    if (gProperty[i][e_prOwnerID]) strcat(gProperty[i][e_prOwnerName], GetCharacterNameByID(gProperty[i][e_prOwnerID]));
   }
 
   gPropertiesIsLoaded = true;
