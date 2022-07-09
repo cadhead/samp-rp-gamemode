@@ -61,6 +61,7 @@ static ShowPopupTextDraw(playerid, const message[][]) {
     PlayerTextDrawHide(playerid, messageTD[playerid][i]);
   }
 
+  KillTimer(timer[playerid]);
   _PopUpActivated[playerid] = false;
 }
 
