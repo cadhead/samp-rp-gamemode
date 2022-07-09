@@ -44,7 +44,7 @@ static CreateMessage(playerid) {
   }
 }
 
-static ShowPopupTextDraw(playerid, message[][]) {
+static ShowPopupTextDraw(playerid, const message[][]) {
   TextDrawShowForPlayer(playerid, box);
 
   for (new i; i < 4; i++) {
@@ -64,7 +64,7 @@ static ShowPopupTextDraw(playerid, message[][]) {
   _PopUpActivated[playerid] = false;
 }
 
-ShowPopupMessage(playerid, message[][], interval = 5000) {
+ShowPopupMessage(playerid, const message[][], interval = 5000) {
   if (_PopUpActivated[playerid]) @__hlp_popup_HidePopup(playerid);
 
   ShowPopupTextDraw(playerid, message);
