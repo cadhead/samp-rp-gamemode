@@ -1,0 +1,9 @@
+[14/07/2022, 03:54:12] - MySQL Error ID: 2002
+Error Can't connect to MySQL server on 'localhost' (10061): Callback Indirect_FromCallback
+Query: SELECT * FROM houses WHERE 1
+[14/07/2022, 03:54:28] - MySQL Error ID: 1146
+Error Table 'srpgm.houses' doesn't exist: Callback Indirect_FromCallback
+Query: SELECT * FROM houses WHERE 1
+[15/07/2022, 01:21:26] - MySQL Error ID: 2002
+Error Can't connect to MySQL server on 'localhost' (10061): Callback Indirect_FromCallback
+Query: SELECT * FROM enters WHERE 1
