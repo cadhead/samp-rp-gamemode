@@ -80,17 +80,17 @@ public OnPlayerText(playerid, text[]) {
 
 public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
   if (!IsPlayerLoggedIn(playerid)) return 0;
-  if ((flags & CMD_OWNER)) return 0;
-  if ((flags & CMD_ADMIN)) return 0;
-  if ((flags & CMD_MODER)) return 0;
-  if ((flags & CMD_HELPER)) return 0;
-  if ((flags & CMD_PREMIUM)) return 0;
-  if ((flags & CMD_USER)) return 0;
+  if (!(flags & CMD_OWNER) && PlayerIsOwner(playerid)) return 0;
+  if (!(flags & CMD_ADMIN) && PlayerIsAdmin(playerid)) return 0;
+  if (!(flags & CMD_MODER) && PlayerIsModer(playerid)) return 0;
+  if (!(flags & CMD_HELPER) && PlayerIsHelper(playerid)) return 0;
+  if (!(flags & CMD_PREMIUM) && PlayerIsPremium(playerid)) return 0;
 
   return 1;
 }
 
 public OnPlayerCommandPerformed(playerid, cmd[], params[], result, flags) {
+  if (!IsPlayerLoggedIn(playerid)) return 0;
   if (result == -1) {
     SendClientMessage(playerid, COLOR_WHITE, "> Команды не существует.");
 
