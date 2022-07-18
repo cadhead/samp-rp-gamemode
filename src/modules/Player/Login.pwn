@@ -19,6 +19,8 @@ hook OnPlayerConnect(playerid) {
     tmpname[MAX_PLAYER_NAME],
     user_id;
 
+  TogglePlayerSpectating(playerid, true);
+
   LoginCheckTimer[playerid] = defer LoginCheck(playerid);
 
   GetPlayerName(playerid, tmpname);
@@ -52,8 +54,16 @@ hook OnPlayerConnect(playerid) {
   return 1;
 }
 
-hook OnPlayerDisconnect(playerid) {
+hook OnPlayerDisconnect(playerid, reason) {
   stop LoginCheckTimer[playerid];
+
+  IsLogged[playerid] = false;
+  LoginCheckTimer[playerid] = 0;
+  LoginInputs[playerid] = 0;
+}
+
+hook OnPlayerSpawn(playerid) {
+  TogglePlayerSpectating(playerid, false);
 }
 
 DialogCreate:dLogin_main(playerid) {
@@ -81,7 +91,7 @@ DialogResponse:dLogin_main(playerid, response, listitem, inputtext[]) {
 
     inline LoadCharacter() {
       SetCharacterState(playerid);
-      printf(gCharacterFormatedName[playerid]);
+      IsLogged[playerid] = true;
     }
 
     MySQL_TQueryInline(SQL_GetHandle(),  
@@ -159,6 +169,11 @@ static SetCharacterState(playerid) {
 
   SetSpawnPointDefault(playerid);
   FormatCharacterName(playerid);
+  SetSpawnInfo(playerid, 0, gCharacter[playerid][e_cSkin],
+    XYZ0(gCharacter[playerid][e_cSpawn]),
+    gCharacter[playerid][e_cSpawn][POS_ANGLE],
+    0, 0, 0, 0, 0, 0);
+  SpawnPlayer(playerid);
 }
 
 static SetSpawnPointDefault(playerid) {
