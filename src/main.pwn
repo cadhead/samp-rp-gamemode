@@ -79,6 +79,7 @@ public OnPlayerText(playerid, text[]) {
 }
 
 public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
+  if (!IsPlayerLoggedIn(playerid)) return 0;
   if ((flags & CMD_OWNER)) return 0;
   if ((flags & CMD_ADMIN)) return 0;
   if ((flags & CMD_MODER)) return 0;
