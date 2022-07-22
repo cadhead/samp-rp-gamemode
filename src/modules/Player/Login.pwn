@@ -14,6 +14,15 @@ IsPlayerLoggedIn(playerid) {
 }
 // -
 
+timer LoginCheck[LOGIN_TIME](playerid) {
+  if (!IsPlayerLoggedIn(playerid) && IsPlayerConnected(playerid)) {
+    SendClientMessage(playerid, COLOR_ADMIN_ACTION, "> Время на авторизацию вышло.");
+    KickPlayer(playerid);
+  }
+
+  return 1;
+}
+
 hook OnPlayerConnect(playerid) {
   new
     tmpname[MAX_PLAYER_NAME],
@@ -58,7 +67,7 @@ hook OnPlayerDisconnect(playerid, reason) {
   stop LoginCheckTimer[playerid];
 
   IsLogged[playerid] = false;
-  LoginCheckTimer[playerid] = 0;
+  LoginCheckTimer[playerid] = Timer:0;
   LoginInputs[playerid] = 0;
 }
 
@@ -105,15 +114,6 @@ DialogResponse:dLogin_main(playerid, response, listitem, inputtext[]) {
   ++LoginInputs[playerid];
 
   return SendPlayerBadLogin(playerid);
-}
-
-timer LoginCheck[LOGIN_TIME](playerid) {
-  if (!IsPlayerLoggedIn(playerid) && IsPlayerConnected(playerid)) {
-    SendClientMessage(playerid, COLOR_ADMIN_ACTION, "> Время на авторизацию вышло.");
-    KickPlayer(playerid);
-  }
-
-  return 1;
 }
 
 static SendPlayerBadLogin(playerid) {
