@@ -12,19 +12,19 @@ static group_names[][] = {
 };
 
 PlayerIsHelper(playerid) {
-  return (gAccount[playerid][e_acAdmin] == __PL_HELPER);
+  return (gAccount[playerid][e_acAdmin] >= __PL_HELPER);
 }
 
 PlayerIsModer(playerid) {
-  return (gAccount[playerid][e_acAdmin] == __PL_MODER);
+  return (gAccount[playerid][e_acAdmin] >= __PL_MODER);
 }
 
 PlayerIsAdmin(playerid) {
-  return (gAccount[playerid][e_acAdmin] == __PL_ADMIN);
+  return (gAccount[playerid][e_acAdmin] >= __PL_ADMIN);
 }
 
 PlayerIsOwner(playerid) {
-  return (gAccount[playerid][e_acAdmin] == __PL_OWNER);
+  return (gAccount[playerid][e_acAdmin] >= __PL_OWNER);
 }
 
 PlayerIsPremium(playerid) {
