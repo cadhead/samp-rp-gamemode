@@ -10,3 +10,6 @@ Query: SELECT * FROM enters WHERE 1
 [30/07/2022, 22:16:42] - MySQL Error ID: 2002
 Error Can't connect to MySQL server on 'localhost' (10061): Callback Indirect_FromCallback
 Query: SELECT * FROM enters WHERE 1
+[15/08/2022, 03:31:11] - MySQL Error ID: 2002
+Error Can't connect to MySQL server on 'localhost' (10061): Callback Indirect_FromCallback
+Query: SELECT * FROM enters WHERE 1

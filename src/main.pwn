@@ -74,19 +74,20 @@
 
 main() {}
 
-// public OnPlayerText(playerid, text[]) {
-//   return 0;
-// }
+public OnPlayerText(playerid, text[]) {
+  return 1;
+}
 
 public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
   if (!IsPlayerLoggedIn(playerid)) {
     return SendClientMessage(playerid, COLOR_WHITE, "> Вы не авторизованы!");
   }
-  // if (!(flags & CMD_OWNER) && PlayerIsOwner(playerid)) return 0;
-  // if (!(flags & CMD_ADMIN) && PlayerIsAdmin(playerid)) return 0;
-  // if (!(flags & CMD_MODER) && PlayerIsModer(playerid)) return 0;
-  // if (!(flags & CMD_HELPER) && PlayerIsHelper(playerid)) return 0;
-  // if (!(flags & CMD_PREMIUM) && PlayerIsPremium(playerid)) return 0;
+
+  if ((flags & CMD_OWNER) && PlayerIsOwner(playerid)) return 0;
+  if ((flags & CMD_ADMIN) && PlayerIsAdmin(playerid)) return 0;
+  if ((flags & CMD_MODER) && PlayerIsModer(playerid)) return 0;
+  if ((flags & CMD_HELPER) && PlayerIsHelper(playerid)) return 0;
+  if ((flags & CMD_PREMIUM) && PlayerIsPremium(playerid)) return 0;
 
   return 1;
 }
