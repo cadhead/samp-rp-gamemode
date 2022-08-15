@@ -14,10 +14,21 @@ IsPlayerLoggedIn(playerid) {
 }
 // -
 
+timer LoginCheck[LOGIN_TIME](playerid) {
+  if (!IsPlayerLoggedIn(playerid) && IsPlayerConnected(playerid)) {
+    SendClientMessage(playerid, COLOR_ADMIN_ACTION, "> Время на авторизацию вышло.");
+    KickPlayer(playerid);
+  }
+
+  return 1;
+}
+
 hook OnPlayerConnect(playerid) {
   new
     tmpname[MAX_PLAYER_NAME],
     user_id;
+
+  TogglePlayerSpectating(playerid, true);
 
   LoginCheckTimer[playerid] = defer LoginCheck(playerid);
 
@@ -52,8 +63,16 @@ hook OnPlayerConnect(playerid) {
   return 1;
 }
 
-hook OnPlayerDisconnect(playerid) {
+hook OnPlayerDisconnect(playerid, reason) {
   stop LoginCheckTimer[playerid];
+
+  IsLogged[playerid] = false;
+  LoginCheckTimer[playerid] = Timer:0;
+  LoginInputs[playerid] = 0;
+}
+
+hook OnPlayerSpawn(playerid) {
+  TogglePlayerSpectating(playerid, false);
 }
 
 DialogCreate:dLogin_main(playerid) {
@@ -81,7 +100,7 @@ DialogResponse:dLogin_main(playerid, response, listitem, inputtext[]) {
 
     inline LoadCharacter() {
       SetCharacterState(playerid);
-      printf(gCharacterFormatedName[playerid]);
+      IsLogged[playerid] = true;
     }
 
     MySQL_TQueryInline(SQL_GetHandle(),  
@@ -95,15 +114,6 @@ DialogResponse:dLogin_main(playerid, response, listitem, inputtext[]) {
   ++LoginInputs[playerid];
 
   return SendPlayerBadLogin(playerid);
-}
-
-timer LoginCheck[LOGIN_TIME](playerid) {
-  if (!IsPlayerLoggedIn(playerid) && IsPlayerConnected(playerid)) {
-    SendClientMessage(playerid, COLOR_ADMIN_ACTION, "> Время на авторизацию вышло.");
-    KickPlayer(playerid);
-  }
-
-  return 1;
 }
 
 static SendPlayerBadLogin(playerid) {
@@ -159,6 +169,11 @@ static SetCharacterState(playerid) {
 
   SetSpawnPointDefault(playerid);
   FormatCharacterName(playerid);
+  SetSpawnInfo(playerid, 0, gCharacter[playerid][e_cSkin],
+    XYZ0(gCharacter[playerid][e_cSpawn]),
+    gCharacter[playerid][e_cSpawn][POS_ANGLE],
+    0, 0, 0, 0, 0, 0);
+  SpawnPlayer(playerid);
 }
 
 static SetSpawnPointDefault(playerid) {

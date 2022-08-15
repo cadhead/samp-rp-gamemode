@@ -74,42 +74,20 @@
 
 main() {}
 
-public OnPlayerConnect(playerid) {
-  TogglePlayerSpectating(playerid, true);
-  SetPlayerColor(playerid, 0xFFFFFF00);
-
-  SetSpawnInfo(
-    playerid, 0,
-    CHARACTER_DEFAULT_SKIN,
-    CHARACTER_DEFAULT_POS_X,
-    CHARACTER_DEFAULT_POS_Y,
-    CHARACTER_DEFAULT_POS_Z,
-    CHARACTER_DEFAULT_POS_A,
-    0, 0, 0, 0, 0, 0
-  );
-
-  SpawnPlayer(playerid);
-
-  return 1;
-}
-
-public OnPlayerSpawn(playerid) {
-  TogglePlayerSpectating(playerid, false);
-
-  return 1;
-}
-
 public OnPlayerText(playerid, text[]) {
-  return 0;
+  return 1;
 }
 
 public OnPlayerCommandReceived(playerid, cmd[], params[], flags) {
-  if ((flags & CMD_OWNER)) return 0;
-  if ((flags & CMD_ADMIN)) return 0;
-  if ((flags & CMD_MODER)) return 0;
-  if ((flags & CMD_HELPER)) return 0;
-  if ((flags & CMD_PREMIUM)) return 0;
-  if ((flags & CMD_USER)) return 0;
+  if (!IsPlayerLoggedIn(playerid)) {
+    return SendClientMessage(playerid, COLOR_WHITE, "> Вы не авторизованы!");
+  }
+
+  if ((flags & CMD_OWNER) && PlayerIsOwner(playerid)) return 0;
+  if ((flags & CMD_ADMIN) && PlayerIsAdmin(playerid)) return 0;
+  if ((flags & CMD_MODER) && PlayerIsModer(playerid)) return 0;
+  if ((flags & CMD_HELPER) && PlayerIsHelper(playerid)) return 0;
+  if ((flags & CMD_PREMIUM) && PlayerIsPremium(playerid)) return 0;
 
   return 1;
 }

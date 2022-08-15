@@ -1,3 +1,5 @@
 #include "modules\Player\Player_Header.inc"
 #include "modules\Player\Login.pwn"
 #include "modules\Player\Player_CMD.pwn"
+#include "modules\Player\Flush.pwn"
+#include "modules\Player\Privilege.pwn"
